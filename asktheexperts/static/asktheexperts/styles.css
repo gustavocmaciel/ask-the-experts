@@ -3,10 +3,39 @@
 }
 
 body {
-    background: url('/static/cool-background.png') no-repeat center center fixed;
+    background: url('/static/background.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     
-  }
+}
+
+.sign {
+    background-color:white; 
+    border-radius: 30px; 
+    max-width: 300px; 
+    margin-bottom: 9.5px; 
+    padding-bottom: 9.5px;
+
+}
+
+#register {
+    margin-top: 10px; 
+}
+
+#login {
+    margin-top: 40px; 
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.darkmagenta {
+    color:darkmagenta; 
+}
+
+.account-message {
+    margin-right: 3px;
+}
