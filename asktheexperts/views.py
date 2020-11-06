@@ -60,3 +60,7 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "asktheexperts/register.html")
+
+
+def questions(request):
+    return render(request, "asktheexperts/questions.html")
