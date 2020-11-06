@@ -15,19 +15,19 @@
             <form action="{% url 'register' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label class="form-label">Username</label>
+                    <label><strong>Username</strong></label>
                     <input class="form-control" autofocus type="text" name="username" placeholder="Enter your username">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Email</label>
+                    <label><strong>Email</strong></label>
                     <input class="form-control" type="email" name="email" placeholder="Enter your email address">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Password</label>
+                    <label"><strong>Password</strong></label>
                     <input class="form-control" type="password" name="password" placeholder="Enter your password">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Confirm Password</label>
+                    <label><strong>Confirm Password</strong></label>
                     <input class="form-control" type="password" name="confirmation" placeholder="Confirm your password">
                 </div>
                 <input class="btn btn-block btn-success" type="submit" value="Register">

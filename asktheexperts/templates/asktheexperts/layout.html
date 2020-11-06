@@ -33,10 +33,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{% url 'index' %}"><strong>Home</strong> <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Questions</a>
+                        <a class="nav-link" href="#"><strong>Questions</strong></a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -44,15 +44,24 @@
                         <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
                         <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Settings</a>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#"><strong>{{ user.username }}user</strong></a>
                         </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'login' %}">Log in</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#"><strong>Settings</strong></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'logout' %}"><strong>Log Out</strong></a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'login' %}"><strong>Log In</strong></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'register' %}"><strong>Register</strong></a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
