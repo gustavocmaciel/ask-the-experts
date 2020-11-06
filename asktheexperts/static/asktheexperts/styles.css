@@ -13,7 +13,7 @@ body {
 
 .sign {
     background-color:white; 
-    border-radius: 30px; 
+    border-radius: 10px; 
     max-width: 300px; 
     margin-bottom: 9.5px; 
     padding-bottom: 9.5px;
@@ -36,6 +36,29 @@ body {
     color:darkmagenta; 
 }
 
+.message-alert {
+    color:red; 
+    font-weight: bold;
+}
+
 .account-message {
     margin-right: 3px;
+}
+
+.index-button {
+    border-radius: 50px;
+    margin: 10px;
+    width: 200px;
+}
+
+.white-button {
+    color:white;
+    border-color: white;
+}
+
+.white-button:hover {
+    color: #28a745;
+    background-color: white;
+    border-color: white;
+
 }

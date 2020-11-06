@@ -10,7 +10,7 @@
         <div class="row justify-content-center">
 
             {% if message %}
-                <div>{{ message }}</div>
+                <div class="message-alert">{{ message }}</div>
             {% endif %}
 
             <form action="{% url 'login' %}" method="post">
