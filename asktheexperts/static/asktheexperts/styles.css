@@ -62,3 +62,10 @@ body {
 .no-decoration:hover {
     text-decoration: none;
 }
+
+.questions {
+    background-color: white; 
+    margin-top: 15px; 
+    margin-bottom: 15px; 
+    border-radius: 10px;
+}

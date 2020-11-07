@@ -46,7 +46,7 @@
                     </form>
                     {% if user.is_authenticated %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="#"><strong>Ask a question</strong></a>
+                            <a class="nav-link" href="{% url 'ask_question' %}"><strong>Ask a question</strong></a>
                         </li>
                         <a class="no-decoration" href="#">
                             <div class="row" style="margin-left: 1px; margin-right: 1px;">

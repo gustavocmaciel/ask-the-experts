@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
-from .models import User
+from .models import User, Question
 
 def index(request):
     return render(request, "asktheexperts/index.html", {
@@ -64,3 +64,15 @@ def register(request):
 
 def questions(request):
     return render(request, "asktheexperts/questions.html")
+
+
+def ask_question(request):
+    if request.method == "GET":
+        return render(request, "asktheexperts/ask_question.html")
+    else:
+        # Save new question
+        title = request.POST["title"]
+        content = request.POST["content"]
+        new_question = Question(user=request.user, title=title, content=content)
+        new_question.save()
+        return HttpResponseRedirect(reverse("index"))

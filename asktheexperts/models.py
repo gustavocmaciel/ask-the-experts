@@ -4,8 +4,8 @@ from django.db import models
 
 class User(AbstractUser):
     photo = models.ImageField(upload_to='images/', default="images/default_image.jpg")
-    #vote_question = models.ManyToManyField("Question", symmetrical=False, related_name="question_voted")
-    #vote_answer = models.ManyToManyField("Answer", symmetrical=False, related_name="answer_voted")
+    vote_question = models.ManyToManyField("Question", symmetrical=False, related_name="question_voted")
+    vote_answer = models.ManyToManyField("Answer", symmetrical=False, related_name="answer_voted")
     rank = models.IntegerField(default=1)
 
     def __str__(self):

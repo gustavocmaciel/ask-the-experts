@@ -1,0 +1,31 @@
+{% extends "asktheexperts/layout.html" %}
+
+{% block body %}
+
+    <div class="container questions">
+        <br>
+        <div>
+            <h2 class="darkmagenta">Ask Question</h2>
+        </div>
+        <div>
+            {% if message %}
+                <div class="message-alert">{{ message }}</div>
+            {% endif %}
+
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label><strong>Title</strong></label>
+                    <input class="form-control" autofocus type="text" name="title" placeholder="Question Title">
+                </div>
+                <div class="form-group">
+                    <label><strong>Question</strong></label>
+                    <textarea style="width: 100%; min-height:150px;" class="form-control" type="textarea" name="content" placeholder="Question"></textarea>
+                </div>
+                <input class="btn btn-block btn-success" style="max-width:290px;" type="submit" value="Send Question">
+                <br>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
