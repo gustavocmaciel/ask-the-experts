@@ -12,6 +12,7 @@
         <link href="static/logo.png" rel="icon">
 
         <title>{% block title %}Ask the Experts{% endblock %}</title>
+        
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'asktheexperts/styles.css' %}" rel="stylesheet">
 
@@ -22,6 +23,8 @@
         {% endblock %}
     </head>
     <body>
+        
+        <!--Nav bar-->
         <nav id="nav-bar" class="navbar navbar-expand-lg navbar-dark">
             <a class="navbar-brand" href="{% url 'index' %}">
                 <img src="static/logo.png" height="40px" loading="lazy">
@@ -46,7 +49,7 @@
                     </form>
                     {% if user.is_authenticated %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'ask_question' %}"><strong>Ask a question</strong></a>
+                            <a class="nav-link" href="{% url 'ask_question' %}"><strong>Ask Question</strong></a>
                         </li>
                         <a class="no-decoration" href="#">
                             <div class="row" style="margin-left: 1px; margin-right: 1px;">
@@ -75,6 +78,8 @@
                 </ul>
             </div>
         </nav>
+        <!--Nav bar end-->
+
         {% block body %}
         {% endblock %}
     </body>

@@ -1,5 +1,9 @@
 {% extends "asktheexperts/layout.html" %}
 
+{% block title %}
+Ask Question - Ask the Experts
+{% endblock %}
+
 {% block body %}
 
     <div class="container questions">
@@ -12,19 +16,22 @@
                 <div class="message-alert">{{ message }}</div>
             {% endif %}
 
+            <!--Ask question form-->
             <form action="{% url 'ask_question' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     <label><strong>Title</strong></label>
-                    <input class="form-control" autofocus type="text" name="title" placeholder="Question Title" required>
+                    <input class="form-control" autofocus type="text" name="title" placeholder="Title" required>
                 </div>
                 <div class="form-group">
                     <label><strong>Question</strong></label>
-                    <textarea style="width: 100%; min-height:150px;" class="form-control" type="textarea" name="content" placeholder="Question" required></textarea>
+                    <textarea class="form-control" type="textarea" name="content" placeholder="Question" required></textarea>
                 </div>
-                <input class="btn btn-block btn-success" style="max-width:290px;" type="submit" value="Send Question">
+                <input id="send-question-btn" class="btn btn-block btn-success" type="submit" value="Send Question">
                 <br>
             </form>
+            <!--Ask question form end-->
+
         </div>
     </div>
 

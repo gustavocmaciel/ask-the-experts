@@ -11,6 +11,12 @@ body {
     
 }
 
+#index-div {
+    max-height: 500px;
+}
+
+/* Register/Login page */
+
 .sign {
     background-color:white; 
     border-radius: 10px; 
@@ -41,6 +47,8 @@ body {
     margin-right: 3px;
 }
 
+/* Index page */
+
 .index-button {
     border-radius: 50px;
     margin: 10px;
@@ -63,6 +71,8 @@ body {
     text-decoration: none;
 }
 
+/* Questions page */
+
 .questions {
     background-color: white; 
     margin-top: 15px; 
@@ -70,9 +80,61 @@ body {
     border-radius: 10px;
 }
 
-.truncate {
-    /*width: 250px;*/
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+textarea {
+    width: 100%; 
+    min-height:150px;
+}
+
+#send-question-btn {
+    max-width:290px;
+}
+
+.white-div {
+    padding-bottom: 100px;
+}
+
+.top-header {
+    padding-top: 15px;
+}
+
+.count-buttons-div {
+    max-width: 900px;
+} 
+
+.questions-count {
+    margin-bottom: 10px; 
+    padding-top:10px;
+}
+
+.questions-div {
+    max-width: 800px;
+}
+
+.question-content {
+    max-width: 600px;
+}
+
+.stats-div {
+    max-width: 80px; 
+    color:white; 
+    background-color: darkmagenta; 
+    border-radius: 8px;
+}
+
+.voted-count {
+    margin-top:10px;
+}
+
+.answers-count {
+    color: white; 
+    font-size: medium; 
+    margin-bottom: 10px;
+}
+
+.username {
+    color: #28a745;   
+}
+
+.timestamp {
+    color: gray;
+}

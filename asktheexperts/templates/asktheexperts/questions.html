@@ -1,48 +1,49 @@
 {% extends "asktheexperts/layout.html" %}
 {% load static %}
 
+{% block title %}
+Questions - Ask the Experts
+{% endblock %}
+
 {% block body %}
 
-    <div class="container questions" style=" padding-bottom: 100px;">
-        <div class="container" style="padding-top: 15px;">
+    <div class="container questions white-div">
+        <div class="container top-header">
             <h2 class="darkmagenta">Top Questions</h2>
         </div>
         <br>
-        <div class="container" style="max-width: 900px;">
-            <div class="row" style="margin-bottom: 10px; padding-top:10px;">
+        <div class="container count-buttons-div">
+            <div class="row questions-count">
                 <div class="col">
                     <h3>{{ questions.count }} {% if questions.count == 1 %} question{% else %} questions{% endif %}</h3>
                 </div>
                 <div class="col">
-                    <span class="col">
-                        <button>Most recent</button>
-                    </span>
-                    <span class="col">
-                        <button>Most votes</button>
-                    </span>
+                    <button class="btn btn-sm btn-outline-success">Most recent</button>
+                    <button class="btn btn-sm btn-outline-success">Most votes</button>
+                    <button class="btn btn-sm btn-outline-success">Most answers</button>
                 </div>
             </div>
             <hr>
                 
             {% for question in questions %}
-                <div class="row container" style="max-width: 800px;">
+                <div class="row container questions-div">
                     <div class="col">
                         <div class="darkmagenta">
-                            <a class="darkmagenta" href="#">{{ question.title }}</a>
+                            <a class="no-decoration" href="#"><span class="darkmagenta">{{ question.title }}</span></a>
                         </div>
                         <br>
-                        <div class="text-truncate" style="max-width: 600px;">
+                        <div class="text-truncate question-content">
                             {{ question.content }}
                         </div>  
                         <div>
                             <br>
-                            <img src="{{ question.user.photo.url }}" height="30px" width="30px">
-                            <span>{{ question.user.username }}</span>
-                            <span>asked at {{ question.timestamp }}</span>
+                            <a href="#"><img src="{{ question.user.photo.url }}" height="30px" width="30px"></a>
+                            <a class="no-decoration" href="#"><span class="darkmagenta">{{ question.user.username }}</span></a>
+                            <span class="timestamp">asked at {{ question.timestamp }}</span>
                         </div>  
                     </div>
-                    <div class="col" style="max-width: 80px; color:white; background-color: darkmagenta; border-radius: 8px;">
-                        <div style="margin-top:10px;">
+                    <div class="col stats-div">
+                        <div class="voted-count">
                             <div class="row justify-content-center">
                                 {{ question.question_voted.count }}
                             </div>
@@ -51,7 +52,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="darkmagenta" style="color: white; font-size: medium; margin-bottom: 10px;">
+                        <div class="darkmagenta answers-count">
                             <div class="row justify-content-center">
                                 {{ question.answered_question.count }}
                             </div>

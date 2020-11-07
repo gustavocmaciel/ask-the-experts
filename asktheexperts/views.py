@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
@@ -70,6 +71,7 @@ def questions(request):
     })
 
 
+@login_required(login_url="login")
 def ask_question(request):
     if request.method == "GET":
         return render(request, "asktheexperts/ask_question.html")

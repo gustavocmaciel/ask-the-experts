@@ -12,6 +12,7 @@
                 <div class="message-alert">{{ message }}</div>
             {% endif %}
 
+            <!-- Register form-->
             <form action="{% url 'register' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
@@ -33,6 +34,8 @@
                 <input class="btn btn-block btn-success" type="submit" value="Register">
                 <br>
             </form>
+            <!--Register form end-->
+
         </div>
         <div class="row justify-content-center">
             <span class="account-message darkmagenta">Already have an account?</span><a href="{% url 'login' %}">Log In here.</a>
