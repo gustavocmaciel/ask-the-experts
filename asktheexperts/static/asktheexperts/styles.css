@@ -58,3 +58,7 @@ body {
     border-color: white;
 
 }
+
+.no-decoration:hover {
+    text-decoration: none;
+}

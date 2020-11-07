@@ -48,10 +48,16 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="#"><strong>Ask a question</strong></a>
                         </li>
-                        <li class="nav-item active">
-                            <img src="user.image.url" height="40px" width="40px">
-                            <a class="nav-link" href="#"><strong>{{ user.username }}user</strong></a>
-                        </li>
+                        <a class="no-decoration" href="#">
+                            <div class="row" style="margin-left: 1px; margin-right: 1px;">
+                                <li class="nav-item active">
+                                    <img src="{{ user.photo.url }}" height="40px" width="40px">
+                                </li>
+                                <li class="nav-item active" style="margin-left: 1px;">
+                                    <span class="nav-link"><strong>{{ user.username }}</strong></span>
+                                </li>
+                            </div>
+                        </a>
                         <li class="nav-item active">
                             <a class="nav-link" href="#"><strong>Settings</strong></a>
                         </li>

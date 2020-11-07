@@ -16,8 +16,8 @@
             <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label><strong>Email</strong></label>
-                    <input autofocus class="form-control" type="email" name="email" placeholder="Enter your email">
+                    <label><strong>Username</strong></label>
+                    <input autofocus class="form-control" type="text" name="username" placeholder="Enter your username">
                 </div>
                 <div class="form-group">
                     <label><strong>Password</strong></label>
