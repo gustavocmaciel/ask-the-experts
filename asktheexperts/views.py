@@ -63,7 +63,11 @@ def register(request):
 
 
 def questions(request):
-    return render(request, "asktheexperts/questions.html")
+    questions = Question.objects.all().order_by("-timestamp")
+
+    return render(request, "asktheexperts/questions.html", {
+        "questions": questions
+    })
 
 
 def ask_question(request):
@@ -75,4 +79,4 @@ def ask_question(request):
         content = request.POST["content"]
         new_question = Question(user=request.user, title=title, content=content)
         new_question.save()
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("questions"))

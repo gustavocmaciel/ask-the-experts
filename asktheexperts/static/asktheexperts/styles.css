@@ -69,3 +69,10 @@ body {
     margin-bottom: 15px; 
     border-radius: 10px;
 }
+
+.truncate {
+    /*width: 250px;*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
