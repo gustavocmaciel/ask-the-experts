@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 
-from .models import User, Question
+from .models import User, Question, Answer
 
 def index(request):
     return render(request, "asktheexperts/index.html", {
@@ -84,18 +84,30 @@ def ask_question(request):
         return HttpResponseRedirect(reverse("questions"))
 
 
-def question(request, question_id, title):
+def question(request, question_id):
     
     try:
         question = Question.objects.get(id=question_id)
     except Question.DoesNotExist:
         raise Http404("Listing not found.")
 
+    answers = Answer.objects.filter(question=question_id)
+
     
     return render(request, "asktheexperts/question.html", {
-        "question": question
+        "question": question,
+        "answers": answers
     })
 
 
 def profile(request, user_id, username):
     pass
+
+
+@login_required(login_url="login")
+def answer(request):
+    # Save new answer
+    question_id = request.POST["question_id"]
+    new_answer = Answer(user_id=request.user.id, question_id=question_id, content=request.POST["content"])
+    new_answer.save()
+    return HttpResponseRedirect(reverse("question",args=(question_id,)))

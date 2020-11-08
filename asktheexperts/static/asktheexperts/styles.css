@@ -85,7 +85,7 @@ textarea {
     min-height:150px;
 }
 
-#send-question-btn {
+.send-btn {
     max-width:290px;
 }
 
