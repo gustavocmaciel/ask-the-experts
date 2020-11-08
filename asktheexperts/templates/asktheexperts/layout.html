@@ -51,7 +51,7 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url 'ask_question' %}"><strong>Ask Question</strong></a>
                         </li>
-                        <a class="no-decoration" href="#">
+                        <a class="no-decoration" href="{% url 'profile' user.id user.username %}">
                             <div class="row" style="margin-left: 1px; margin-right: 1px;">
                                 <li class="nav-item active">
                                     <img src="{{ user.photo.url }}" height="40px" width="40px">

@@ -184,3 +184,29 @@ button:focus {
 .margin-5 {
     margin: 5px;
 }
+
+#photo-box {
+    background-color:darkmagenta; 
+    width: 230px; 
+    height: 300px;
+}
+
+#score-box {
+    background-color:lightgray; 
+    margin-top: 10px;
+}
+
+#user-score {
+    font-weight: bold; 
+    font-size: 20px;
+}
+
+#score-tag {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+    font-size: 18px; 
+    margin-left: 10px;
+}
+
+#profile-info-div {
+    margin-top: 30px;
+}

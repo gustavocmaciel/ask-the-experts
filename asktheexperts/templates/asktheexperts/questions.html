@@ -37,8 +37,8 @@ Questions - Ask the Experts
                         </div>  
                         <div>
                             <br>
-                            <a href="#"><img src="{{ question.user.photo.url }}" height="30px" width="30px"></a>
-                            <a class="no-decoration" href="#"><span class="darkmagenta">{{ question.user.username }}</span></a>
+                            <a href="{% url 'profile' question.user.id question.user.username %}"><img src="{{ question.user.photo.url }}" height="30px" width="30px"></a>
+                            <a class="no-decoration" href="{% url 'profile' question.user.id question.user.username %}"><span class="darkmagenta">{{ question.user.username }}</span></a>
                             <span class="timestamp">asked at {{ question.timestamp }}</span>
                         </div>  
                     </div>

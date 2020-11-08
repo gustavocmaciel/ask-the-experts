@@ -89,7 +89,7 @@ def question(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
     except Question.DoesNotExist:
-        raise Http404("Listing not found.")
+        raise Http404("Question not found.")
 
     answers = Answer.objects.filter(question=question_id)
 
@@ -101,7 +101,10 @@ def question(request, question_id):
 
 
 def profile(request, user_id, username):
-    pass
+    user = User.objects.get(id=user_id)
+    return render(request, "asktheexperts/profile.html", {
+        "user": user
+    })
 
 
 @login_required(login_url="login")

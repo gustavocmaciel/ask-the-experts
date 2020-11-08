@@ -1,0 +1,59 @@
+{% extends "asktheexperts/layout.html" %}
+{% load static %}
+
+{% block title %}
+{{ user.username }} - Ask the Experts
+{% endblock %}
+
+{% block body %}
+
+    <div class="container questions white-div">
+        <div class="container top-header">
+            <h2 class="darkmagenta">Profile</h2>
+        </div>
+        <br>
+        <div class="container count-buttons-div">
+            <div class="row questions-count">
+                <div class="col">
+                    <div id="photo-box" class="col">
+                        <br>
+                        <img src="{{ user.photo.url }}" height="200px" width="200px">
+                        <br>
+                        <div class="col">
+                            <div id="score-box" class="row justify-content-center">
+                                <span id="user-score">{{ user.rank }}</span>
+                                <span id="score-tag">Score</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h2>
+                        {{ user.username }}
+                        
+                    </h2>
+                    Hello world bio max 25
+                </div>
+                <div class="col">
+                    <div id="profile-info-div" class="row">
+                        <div class="col">
+                            <h4><strong>{{ user.questioned.count}}</strong></h4> {% if user.questioned.count == 1 %} question{% else %} questions{% endif %}
+                        </div>
+                        <div class="col">
+                            <h4><strong>{{ user.answered_user.count }}</strong></h4> {% if user.answered_user.count == 1 %} answer{% else %} answers{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h3>Top posts</h3>
+            <hr>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'asktheexperts/main.js' %}"></script>
+{% endblock %}

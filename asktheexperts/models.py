@@ -7,6 +7,8 @@ class User(AbstractUser):
     vote_question = models.ManyToManyField("Question", symmetrical=False, related_name="question_voted")
     vote_answer = models.ManyToManyField("Answer", symmetrical=False, related_name="answer_voted")
     rank = models.IntegerField(default=1)
+    #joined
+    #bio max 25 default="Hello, world!"
 
     def __str__(self):
         return f"{self.id} - {self.username}"
