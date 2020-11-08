@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 
 from .models import User, Question
@@ -82,3 +82,20 @@ def ask_question(request):
         new_question = Question(user=request.user, title=title, content=content)
         new_question.save()
         return HttpResponseRedirect(reverse("questions"))
+
+
+def question(request, question_id, title):
+    
+    try:
+        question = Question.objects.get(id=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Listing not found.")
+
+    
+    return render(request, "asktheexperts/question.html", {
+        "question": question
+    })
+
+
+def profile(request, user_id, username):
+    pass

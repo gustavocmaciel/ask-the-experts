@@ -138,3 +138,49 @@ textarea {
 .timestamp {
     color: gray;
 }
+
+.arrow:hover {
+    color:white;
+    text-decoration:none;
+}
+
+.arrow {
+    color:white;
+    text-decoration:none;
+}
+
+.button-white {
+    color:white
+}
+
+button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+
+button:focus {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+#send-answer-div {
+    max-width: 800px;
+}
+
+#answers-count-div {
+    margin-left: 5px; 
+    margin-top:20px;
+}
+
+.margin-5 {
+    margin: 5px;
+}

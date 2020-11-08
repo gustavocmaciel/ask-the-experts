@@ -29,7 +29,7 @@ Questions - Ask the Experts
                 <div class="row container questions-div">
                     <div class="col">
                         <div class="darkmagenta">
-                            <a class="no-decoration" href="#"><span class="darkmagenta">{{ question.title }}</span></a>
+                            <a class="no-decoration" href="{% url 'question' question.id question.title %}"><span class="darkmagenta">{{ question.title }}</span></a>
                         </div>
                         <br>
                         <div class="text-truncate question-content">
