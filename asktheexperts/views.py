@@ -6,9 +6,9 @@ from django.urls import reverse
 
 from .models import User, Question, Answer
 
+
 def index(request):
-    return render(request, "asktheexperts/index.html", {
-    })
+    return render(request, "asktheexperts/index.html")
 
 
 def login_view(request):
@@ -92,7 +92,6 @@ def question(request, question_id):
         raise Http404("Question not found.")
 
     answers = Answer.objects.filter(question=question_id)
-
     
     return render(request, "asktheexperts/question.html", {
         "question": question,
@@ -113,4 +112,34 @@ def answer(request):
     question_id = request.POST["question_id"]
     new_answer = Answer(user_id=request.user.id, question_id=question_id, content=request.POST["content"])
     new_answer.save()
+    return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+def upvote_question(request):
+    question_id = request.POST["question_id"]
+    user = User.objects.get(id=request.user.id)
+    user.vote_question.add(question_id)
+    return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+def downvote_question(request):
+    question_id = request.POST["question_id"]
+    user = User.objects.get(id=request.user.id)
+    user.vote_question.remove(question_id)
+    return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+def upvote_answer(request):
+    question_id = request.POST["question_id"]
+    answer_id = request.POST["answer_id"]
+    user = User.objects.get(id=request.user.id)
+    user.vote_answer.add(answer_id)
+    return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+def downvote_answer(request):
+    question_id = request.POST["question_id"]
+    answer_id = request.POST["answer_id"]
+    user = User.objects.get(id=request.user.id)
+    user.vote_answer.remove(answer_id)
     return HttpResponseRedirect(reverse("question",args=(question_id,)))

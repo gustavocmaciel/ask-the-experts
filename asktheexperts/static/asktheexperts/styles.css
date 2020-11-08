@@ -119,6 +119,7 @@ textarea {
     color:white; 
     background-color: darkmagenta; 
     border-radius: 8px;
+    max-height: 200px;
 }
 
 .voted-count {
@@ -132,7 +133,7 @@ textarea {
 }
 
 .username {
-    color: #28a745;   
+    color: #28a745;
 }
 
 .timestamp {
