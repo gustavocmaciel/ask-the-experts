@@ -20,7 +20,11 @@ urlpatterns = [
     path("downvote_question", views.downvote_question, name="downvote_question"),
     path("upvote_answer", views.upvote_answer, name="upvote_answer"),
     path("downvote_answer", views.downvote_answer, name="downvote_answer"),
-    path("settings", views.settings, name="settings")
+    path("settings", views.settings, name="settings"),
+    path("settings/change-username", views.change_username, name="change_username"),
+    path("settings/change-email", views.change_email, name="change_email"),
+    path("settings/change-password", views.change_password, name="change_password"),
+    path("settings/delete-account", views.delete_account, name="delete_account")
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

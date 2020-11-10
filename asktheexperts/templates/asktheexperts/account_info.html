@@ -1,0 +1,37 @@
+{% extends "asktheexperts/settings.html" %}
+{% load static %}
+
+{% block div %}
+
+        <div id="account-info-view" class="col">
+            <div id="photo-box" class="col justify-content-center">
+                <br>
+                <img class="img-fluid" src="{{ user.photo.url }}" height="200px" width="200px">
+                Change photo
+                <br>
+                <div class="col">
+                    <div id="score-box" class="row justify-content-center">
+                        <span id="user-score">{{ user.rank }}</span>
+                        <span id="score-tag">Score</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3>
+                    Username: {{ user.username }}
+                    
+                </h3>
+            </div>
+            <div>
+                <h4>
+                    Email: {{ user.email }}
+                </h4>
+            </div>
+            <div>
+                <h4>
+                    Password: ***************
+                </h4>
+            </div>
+        </div>
+
+{% endblock %}

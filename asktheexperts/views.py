@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.db import IntegrityError
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
@@ -26,7 +26,7 @@ def login_view(request):
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "asktheexperts/login.html", {
-                "message": "Invalid email and/or password."
+                "message": "Invalid username and/or password."
             })
     else:
         return render(request, "asktheexperts/login.html")
@@ -65,6 +65,7 @@ def register(request):
 
 
 def questions(request):
+    # Get all questions
     questions = Question.objects.all().order_by("-timestamp")
 
     return render(request, "asktheexperts/questions.html", {
@@ -87,11 +88,13 @@ def ask_question(request):
 
 def question(request, question_id):
     
+    # Get question
     try:
         question = Question.objects.get(id=question_id)
     except Question.DoesNotExist:
         raise Http404("Question not found.")
 
+    # Get answers from selected question
     answers = Answer.objects.filter(question=question_id)
     
     return render(request, "asktheexperts/question.html", {
@@ -101,6 +104,7 @@ def question(request, question_id):
 
 
 def search(request):
+    # Search
     q = request.GET["q"]
     results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
     return render(request, "asktheexperts/search_results.html", {
@@ -111,6 +115,7 @@ def search(request):
 
 
 def profile(request, user_id, username):
+    # Render profile page from selected user
     user = User.objects.get(id=user_id)
     return render(request, "asktheexperts/profile.html", {
         "user": user
@@ -127,6 +132,7 @@ def answer(request):
 
 
 def upvote_question(request):
+    # Upvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
     user.vote_question.add(question_id)
@@ -134,6 +140,7 @@ def upvote_question(request):
 
 
 def downvote_question(request):
+    # Downvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
     user.vote_question.remove(question_id)
@@ -141,6 +148,7 @@ def downvote_question(request):
 
 
 def upvote_answer(request):
+    # Upvote answer
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
@@ -149,6 +157,7 @@ def upvote_answer(request):
 
 
 def downvote_answer(request):
+    # Downvote answer
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
@@ -156,7 +165,121 @@ def downvote_answer(request):
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+@login_required(login_url="login")
 def settings(request):
-    return render(request, "asktheexperts/settings.html", {
-        
+    # Render signed in user's settings page
+    return render(request, "asktheexperts/account_info.html")
+
+
+@login_required(login_url="login")
+def change_username(request):
+    # Change username
+    if request.method == "POST":
+
+        # Get new username
+        new_username = request.POST["new_username"]
+
+        # Get submited password
+        submited_password = request.POST["password"]
+
+        user = authenticate(request, username=request.user.username, password=submited_password)
+
+        # If authentication successful, update username
+        if user is not None:
+            User.objects.filter(id=request.user.id).update(username=new_username)
+            return HttpResponseRedirect(reverse("settings"))
+        else:
+            return render(request, "asktheexperts/change_username.html", {
+                "message": "Invalid password."
+            })
+    else:
+        return render(request, "asktheexperts/change_username.html", {
+        })
+
+
+@login_required(login_url="login")
+def change_email(request):
+    # Change email
+    if request.method == "POST":
+
+        # Get new email
+        new_email = request.POST["new_email"]
+
+        # Get submited password
+        submited_password = request.POST["password"]
+
+        user = authenticate(request, username=request.user.username, password=submited_password)
+
+        # If authentication successful, update email
+        if user is not None:
+            User.objects.filter(id=request.user.id).update(email=new_email)
+            return HttpResponseRedirect(reverse("settings"))
+        else:
+            return render(request, "asktheexperts/change_email.html", {
+                "message": "Invalid password."
+            })
+    else:
+        return render(request, "asktheexperts/change_email.html", {
+        })
+
+
+@login_required(login_url="login")
+def change_password(request):
+    # Change password
+    if request.method == "POST":
+
+        # Get new password
+        new_password = request.POST["new_password"]
+
+        # Get new confirmed password
+        confirmation = request.POST["confirmation"]
+
+        # Ensure password matches confirmation
+        if new_password != confirmation:
+            return render(request, "asktheexperts/change_password.html", {
+                "message": "Passwords must match."
+            })
+        else:
+            # Get current submited password
+            submited_password = request.POST["password"]
+
+            user = authenticate(request, username=request.user.username, password=submited_password)
+
+            # If authentication successful, update password
+            if user is not None:
+                user = User.objects.get(id=request.user.id)
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
+                return HttpResponseRedirect(reverse("settings"))
+            else:
+                return render(request, "asktheexperts/change_password.html", {
+                    "message": "Invalid password."
+                })
+    else:
+        return render(request, "asktheexperts/change_password.html", {
     })
+
+
+@login_required(login_url="login")
+def delete_account(request):
+    # Delete user's account
+    if request.method == "POST":
+
+        # Get password
+        password = request.POST["password"]
+
+        user = authenticate(request, username=request.user.username, password=password)
+        # If authentication successful, delete account
+        if user is not None:
+            user = User.objects.get(id=request.user.id)
+            user.delete()
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "asktheexperts/change_password.html", {
+                "message": "Invalid password."
+            })
+        pass
+    else:
+        return render(request, "asktheexperts/delete_account.html", {
+        })

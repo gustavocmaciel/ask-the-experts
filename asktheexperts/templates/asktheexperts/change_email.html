@@ -1,0 +1,26 @@
+{% extends "asktheexperts/settings.html" %}
+{% load static %}
+
+{% block div %}
+
+    {% if message %}
+        <div class="message-alert">{{ message }}</div>
+    {% endif %}
+
+    <div id="change-username-view" class="justify-content-center">
+        <form action="{% url 'change_email' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label><strong>New Email</strong></label>
+                <input class="form-control" autofocus type="text" name="new_email" placeholder="Enter your new email" required>
+            </div>
+            <div class="form-group">
+                <label"><strong>Password</strong></label>
+                <input class="form-control" type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <input class="btn btn-block btn-success" type="submit" value="Change Email">
+            <br>
+        </form>
+    </div>
+
+{% endblock %}

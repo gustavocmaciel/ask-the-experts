@@ -211,3 +211,7 @@ button:focus {
 #profile-info-div {
     margin-top: 30px;
 }
+
+.settings-button {
+    margin: 10px;
+}
