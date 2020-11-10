@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -99,6 +100,16 @@ def question(request, question_id):
     })
 
 
+def search(request):
+    q = request.GET["q"]
+    results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
+    return render(request, "asktheexperts/search_results.html", {
+        "questions": results,
+        "q": q
+
+    })
+
+
 def profile(request, user_id, username):
     user = User.objects.get(id=user_id)
     return render(request, "asktheexperts/profile.html", {
@@ -143,3 +154,9 @@ def downvote_answer(request):
     user = User.objects.get(id=request.user.id)
     user.vote_answer.remove(answer_id)
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+def settings(request):
+    return render(request, "asktheexperts/settings.html", {
+        
+    })

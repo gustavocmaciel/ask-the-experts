@@ -1,0 +1,131 @@
+{% extends "asktheexperts/layout.html" %}
+{% load static %}
+
+{% block title %}
+Settings - Ask the Experts
+{% endblock %}
+
+{% block body %}
+
+    <div class="container questions white-div">
+        <div class="container top-header">
+            <h2 class="darkmagenta">Settings</h2>
+        </div>
+        <br>
+        <div class="container count-buttons-div">
+            <hr>
+
+            <div class="container count-buttons-div">
+                <div class="row questions-count">
+                    <div class="col" style="max-width: 350px;">
+                    <button class="btn btn-sm btn-outline-success" id="info">Account Info</button><br>
+                    <button class="btn btn-sm btn-outline-success" id="username">Change username</button><br>
+                    <button class="btn btn-sm btn-outline-success" id="email">Change email</button><br>
+                    <button class="btn btn-sm btn-outline-success" id="password">Change password</button><br>
+                    <button class="btn btn-sm btn-outline-danger" id="delete">Delete account</button><br>
+                    </div>
+                    <div id="account-info-view" class="col" style="background-color: blue;">
+                        <div id="photo-box" class="col justify-content-center">
+                            <br>
+                            <img src="{{ user.photo.url }}" height="200px" width="200px">
+                            Change photo
+                            <br>
+                            <div class="col">
+                                <div id="score-box" class="row justify-content-center">
+                                    <span id="user-score">{{ user.rank }}</span>
+                                    <span id="score-tag">Score</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>
+                                Username: {{ user.username }}
+                                
+                            </h3>
+                        </div>
+                        <div>
+                            <h4>
+                                Email: {{ user.email }}
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                Password: ***************
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div id="change-username-view" class="justify-content-center">
+                        <!-- Register form-->
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label><strong>New Username</strong></label>
+                    <input class="form-control" autofocus type="text" name="confirmation" placeholder="Enter your new username">
+                </div>
+                <div class="form-group">
+                    <label"><strong>Password</strong></label>
+                    <input class="form-control" type="password" name="password" placeholder="Enter your password">
+                </div>
+                <input class="btn btn-block btn-success" type="submit" value="Change Username">
+                <br>
+            </form>
+            <!--Register form end-->
+
+                    </div>
+                    <div id="change-email-view" class="justify-content-center">
+                        <!-- Register form-->
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label><strong>New Email</strong></label>
+                    <input class="form-control" autofocus type="text" name="email" placeholder="Enter your new email">
+                </div>
+                <div class="form-group">
+                    <label"><strong>Password</strong></label>
+                    <input class="form-control" type="password" name="password" placeholder="Enter your password">
+                </div>
+                <input class="btn btn-block btn-success" type="submit" value="Change Email">
+                <br>
+            </form>
+            <!--Register form end-->
+
+                    </div>
+                    <div id="change-password-view" class="justify-content-center">
+                        <!-- Register form-->
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label"><strong>Password</strong></label>
+                    <input class="form-control" type="password" name="password" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label><strong>New Password</strong></label>
+                    <input class="form-control" autofocus type="text" name="new_password" placeholder="Enter your new password">
+                </div>
+                <div class="form-group">
+                    <label><strong>Password</strong></label>
+                    <input class="form-control" autofocus type="text" name="confirmation" placeholder="Confirm your new password">
+                </div>
+                <input class="btn btn-block btn-success" type="submit" value="Change Password">
+                <br>
+            </form>
+            <!--Register form end-->
+
+                    </div>
+                    <div id="delete-account-view" class="col">
+                        Are you sure you want to delete your account?
+
+                    </div>
+                    
+                </div>
+                
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'asktheexperts/main.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "asktheexperts/layout.html" %}
+{% load static %}
+
+{% block title %}
+Search: '{{ q }}' - Ask the Experts
+{% endblock %}
+
+{% block body %}
+
+    <div class="container questions white-div">
+        <div class="container top-header">
+            <h2 class="darkmagenta">Search Results: '{{ q }}'</h2>
+        </div>
+        <br>
+        <div class="container count-buttons-div">
+            <div class="row questions-count">
+                <div class="col">
+                    <h3>{{ questions.count }} {% if questions.count == 1 %} result{% else %} results{% endif %}</h3>
+                </div>
+                <div class="col">
+                    <button class="btn btn-sm btn-outline-success">Most recent</button>
+                    <button class="btn btn-sm btn-outline-success">Most votes</button>
+                    <button class="btn btn-sm btn-outline-success">Most answers</button>
+                </div>
+            </div>
+            <hr>
+            {% if not questions %}
+            <div class="col">
+                <br>
+                <div class="row justify-content-center">
+
+                    <svg width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                      </svg>
+                      <br></div>
+                      <div class="row justify-content-center" style="margin-top:30px"><br><h4>No results found for '{{ q }}'</h4><br>
+                      </div>
+                </div>
+
+
+            </div>
+            {% endif %}    
+            {% for question in questions %}
+                <div class="row container questions-div">
+                    <div class="col">
+                        <div class="darkmagenta">
+                            <a class="no-decoration" href="{% url 'question' question.id %}"><span class="darkmagenta">{{ question.title }}</span></a>
+                        </div>
+                        <br>
+                        <div class="text-truncate question-content">
+                            {{ question.content }}
+                        </div>  
+                        <div>
+                            <br>
+                            <a href="{% url 'profile' question.user.id question.user.username %}"><img src="{{ question.user.photo.url }}" height="30px" width="30px"></a>
+                            <a class="no-decoration" href="{% url 'profile' question.user.id question.user.username %}"><span class="darkmagenta">{{ question.user.username }}</span></a>
+                            <span class="timestamp">asked at {{ question.timestamp }}</span>
+                        </div>  
+                    </div>
+                    <div class="col stats-div">
+                        <div class="voted-count">
+                            <div class="row justify-content-center">
+                                {{ question.question_voted.count }}
+                            </div>
+                            <div class="row justify-content-center">
+                                Votes
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="darkmagenta answers-count">
+                            <div class="row justify-content-center">
+                                {{ question.answered_question.count }}
+                            </div>
+                            <div class="row justify-content-center">
+                                Answers
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'asktheexperts/main.js' %}"></script>
+{% endblock %}
