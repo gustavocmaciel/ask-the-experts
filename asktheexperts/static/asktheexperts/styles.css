@@ -215,3 +215,8 @@ button:focus {
 .settings-button {
     margin: 10px;
 }
+
+#photo-settings {
+    width: 200px; 
+    height: 250px;
+}

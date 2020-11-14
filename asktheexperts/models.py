@@ -15,7 +15,7 @@ class User(AbstractUser):
 
 
 class Question(models.Model):
-    user = models.ForeignKey("User", on_delete=models.PROTECT, related_name="questioned")
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="questioned")
     title = models.CharField(max_length=64)
     content = models.TextField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -25,8 +25,8 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    user = models.ForeignKey("User", on_delete=models.PROTECT, related_name="answered_user")
-    question = models.ForeignKey("Question", on_delete=models.PROTECT, related_name="answered_question")
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="answered_user")
+    question = models.ForeignKey("Question", on_delete=models.CASCADE, related_name="answered_question")
     content = models.TextField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     selected = models.BooleanField(default=False)

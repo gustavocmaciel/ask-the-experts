@@ -1,11 +1,26 @@
+import os
+from django import forms
+from django.forms import ModelForm, ImageField, TextInput
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.db import IntegrityError
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404, get_object_or_404
 from django.urls import reverse
 
 from .models import User, Question, Answer
+
+
+class EditProfileForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+
+class ChangeImageForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['photo']
 
 
 def index(request):
@@ -94,12 +109,19 @@ def question(request, question_id):
     except Question.DoesNotExist:
         raise Http404("Question not found.")
 
+    # Get answers count
+    answers_count = Answer.objects.filter(question=question_id).count
+
     # Get answers from selected question
-    answers = Answer.objects.filter(question=question_id)
+    answers = Answer.objects.filter(question=question_id, selected=False)
+    # Get selected answers from selected question
+    selected_answers = Answer.objects.filter(question=question_id, selected=True)
     
     return render(request, "asktheexperts/question.html", {
         "question": question,
-        "answers": answers
+        "answers": answers,
+        "selected_answers": selected_answers,
+        "answers_count": answers_count
     })
 
 
@@ -128,6 +150,26 @@ def answer(request):
     question_id = request.POST["question_id"]
     new_answer = Answer(user_id=request.user.id, question_id=question_id, content=request.POST["content"])
     new_answer.save()
+    return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+def select(request):
+    question_id = request.POST["question_id"]
+    answer_id = request.POST["answer_id"]
+    #answer = Answer.objects.get(id=answer_id)
+    Answer.objects.filter(id=answer_id).update(selected=True)
+    #answer.selected = True
+    #answer.save()
+    return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+def unselect(request):
+    question_id = request.POST["question_id"]
+    answer_id = request.POST["answer_id"]
+    #answer = Answer.objects.get(id=answer_id)
+    Answer.objects.filter(id=answer_id).update(selected=False)
+    #answer.selected = True
+    #answer.save()
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
@@ -170,6 +212,79 @@ def settings(request):
     # Render signed in user's settings page
     return render(request, "asktheexperts/account_info.html")
 
+
+@login_required(login_url="login")
+def change_photo(request):
+    if request.method == 'POST':
+        #form= ChangeImageForm(request.POST, request.FILES)
+        #if form.is_valid():
+        #    form.save()
+
+
+        p_form = ChangeImageForm(request.POST,request.FILES,instance=request.user.user)
+        if p_form.is_valid():
+            photo = request.POST["photo"]
+            User.objects.filter(id=request.user.id).update(photo=photo)
+        #    p_form.photo = p_form.cleaned_data["photo"]
+            #p_form.save()
+
+
+
+#    if request.method == "POST":
+#        form = ChangeImageForm(request.POST, instance=request.user)
+#        if form.is_valid():
+#            form.save()
+#            if request.FILES.get('photo', None) != None:
+#                try:
+#                    os.remove(request.user.photo.url)
+#                except Exception as e:
+#                    print('Exception in removing old profile image: ', e)
+#                request.user.photo = request.FILES['photo']
+#                request.user.save()
+
+
+
+
+#        update_profile_form = ChangeImageForm(data=request.POST, instance=user_profile)
+
+#        if update_profile_form.is_valid():
+#            profile = update_profile_form.save(commit=False)
+#            profile.username = request.user.username
+
+#            if 'photo' in request.FILES:
+#                profile.photo = request.FILES['photo']
+
+#            profile.save()
+
+
+
+
+
+#    if request.method == "POST":
+#        form = ChangeImageForm(request.POST)
+#        user = get_object_or_404(user=request.user)
+#        form = ChangeImageForm(request.POST, instance=["photo"])
+#        if form.is_valid():
+#            form.save()
+            
+        #if form.is_valid():
+            
+        #    new_photo = form.save(commit=False)
+        #    new_photo.user = request.user
+        #    new_photo.photo = form.cleaned_data["photo"]
+            #new_photo.photo = new_photo.photo
+        #    new_photo.save()
+            
+            #new_photo = form.save(commit=False)
+            #new_photo.save(update_fields=['photo'])
+
+            #User.objects.filter(id=request.user.id).update(photo=photo)
+            return HttpResponseRedirect(reverse("settings"))
+
+    else:
+        return render(request, "asktheexperts/change_photo.html", {
+            "form": ChangeImageForm(instance=request.user)
+        })
 
 @login_required(login_url="login")
 def change_username(request):

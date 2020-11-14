@@ -4,17 +4,15 @@
 {% block div %}
 
         <div id="account-info-view" class="col">
-            <div id="photo-box" class="col justify-content-center">
+            <div id="photo-settings" class="col">
                 <br>
                 <img class="img-fluid" src="{{ user.photo.url }}" height="200px" width="200px">
-                Change photo
-                <br>
-                <div class="col">
-                    <div id="score-box" class="row justify-content-center">
-                        <span id="user-score">{{ user.rank }}</span>
-                        <span id="score-tag">Score</span>
-                    </div>
+                <div class="row justify-content-center" style="margin-top:10px">
+                    <a href="{% url 'change_photo' %}">
+                        <button class="btn btn-sm btn-success">Change Photo</button>
+                    </a>
                 </div>
+                
             </div>
             <div>
                 <h3>

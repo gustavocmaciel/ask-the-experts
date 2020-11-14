@@ -1,0 +1,25 @@
+{% extends "asktheexperts/settings.html" %}
+{% load static %}
+
+{% block div %}
+
+        <div id="account-info-view" class="col">
+            <div id="photo-settings" class="col">
+                <div class="row justify-content-center">
+                    <strong>Change Photo</strong>
+                </div>
+                <img class="img-fluid" src="{{ user.photo.url }}" height="200px" width="200px">
+                <form action="{% url 'settings' %}" enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.as_p }}
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-sm btn-success" type="submit" value="Submit">
+                    </div>
+                </form>
+                <br>
+            </div>
+        </div>
+
+{% endblock %}
