@@ -111,7 +111,6 @@ def question(request, question_id):
 
     # Get answers count
     answers_count = Answer.objects.filter(question=question_id).count
-
     # Get answers from selected question
     answers = Answer.objects.filter(question=question_id, selected=False)
     # Get selected answers from selected question
@@ -154,22 +153,18 @@ def answer(request):
 
 
 def select(request):
+    # Mark answer as selected
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
-    #answer = Answer.objects.get(id=answer_id)
     Answer.objects.filter(id=answer_id).update(selected=True)
-    #answer.selected = True
-    #answer.save()
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
 def unselect(request):
+    # Unmark answer as selected
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
-    #answer = Answer.objects.get(id=answer_id)
     Answer.objects.filter(id=answer_id).update(selected=False)
-    #answer.selected = True
-    #answer.save()
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
