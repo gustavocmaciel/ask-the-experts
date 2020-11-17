@@ -185,12 +185,12 @@ def upvote_question(request):
     # Upvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
-    user.vote_question.add(question_id)
+    user.upvote_question.add(question_id)
 
     # Update votes number
-#    question = Question.objects.get(id=question_id)
-#    question.votes += 1
-#    question.save()
+    question = Question.objects.get(id=question_id)
+    question.votes += 1
+    question.save()
 
     # Update score
     question_user_id = Question.objects.get(id=question_id).user_id
@@ -205,7 +205,12 @@ def downvote_question(request):
     # Downvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
-    user.vote_question.remove(question_id)
+    user.downvote_question.remove(question_id)
+
+    # Update votes number
+    question = Question.objects.get(id=question_id)
+    question.votes -= 1
+    question.save()
 
     # Update score
     question_user_id = Question.objects.get(id=question_id).user_id
@@ -223,7 +228,12 @@ def upvote_answer(request):
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
-    user.vote_answer.add(answer_id)
+    user.upvote_answer.add(answer_id)
+
+    # Update votes number
+    answer = Answer.objects.get(id=answer_id)
+    answer.votes += 1
+    answer.save()
 
     # Update score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
@@ -239,7 +249,12 @@ def downvote_answer(request):
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
-    user.vote_answer.remove(answer_id)
+    user.downvote_answer.remove(answer_id)
+
+    # Update votes number
+    answer = Answer.objects.get(id=answer_id)
+    answer.votes -= 1
+    answer.save()
 
     # Update score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
