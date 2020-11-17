@@ -157,6 +157,19 @@ def select(request):
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
     Answer.objects.filter(id=answer_id).update(selected=True)
+
+    # Update score
+    answer_user_id = Answer.objects.get(id=answer_id).user_id
+    answer_user_score = User.objects.get(id=answer_user_id).score
+    new_score = answer_user_score + 15
+    User.objects.filter(id=answer_user_id).update(score=new_score)
+
+    # Update selector user score
+    selector_score = User.objects.get(id=request.user.id).score
+    new_score = selector_score + 2
+    User.objects.filter(id=request.user.id).update(score=new_score)
+
+
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
@@ -173,6 +186,18 @@ def upvote_question(request):
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
     user.vote_question.add(question_id)
+
+    # Update votes number
+#    question = Question.objects.get(id=question_id)
+#    question.votes += 1
+#    question.save()
+
+    # Update score
+    question_user_id = Question.objects.get(id=question_id).user_id
+    question_user_score = User.objects.get(id=question_user_id).score
+    new_score = question_user_score + 10
+    User.objects.filter(id=question_user_id).update(score=new_score)
+
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
@@ -181,6 +206,15 @@ def downvote_question(request):
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
     user.vote_question.remove(question_id)
+
+    # Update score
+    question_user_id = Question.objects.get(id=question_id).user_id
+    question_user_score = User.objects.get(id=question_user_id).score
+    new_score = question_user_score - 2
+    if new_score < 1:
+        new_score = 1
+    User.objects.filter(id=question_user_id).update(score=new_score)
+
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
@@ -190,6 +224,13 @@ def upvote_answer(request):
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
     user.vote_answer.add(answer_id)
+
+    # Update score
+    answer_user_id = Answer.objects.get(id=answer_id).user_id
+    answer_user_score = User.objects.get(id=answer_user_id).score
+    new_score = answer_user_score + 10
+    User.objects.filter(id=answer_user_id).update(score=new_score)
+
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
@@ -199,6 +240,22 @@ def downvote_answer(request):
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
     user.vote_answer.remove(answer_id)
+
+    # Update score
+    answer_user_id = Answer.objects.get(id=answer_id).user_id
+    answer_user_score = User.objects.get(id=answer_user_id).score
+    new_score = answer_user_score - 2
+    if new_score < 1:
+        new_score = 1
+    User.objects.filter(id=answer_user_id).update(score=new_score)
+
+    # Update current user score
+    signed_in_user_score = User.objects.get(id=request.user.id).score
+    new_score = signed_in_user_score - 1
+    if new_score < 1:
+        new_score = 1
+    User.objects.filter(id=request.user.id).update(score=new_score)
+
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
