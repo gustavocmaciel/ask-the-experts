@@ -9,7 +9,7 @@
                     <strong>Change Photo</strong>
                 </div>
                 <img class="img-fluid" src="{{ user.photo.url }}" height="200px" width="200px">
-                <form action="{% url 'settings' %}" enctype="multipart/form-data" method="post">
+                <form action="{% url 'change_photo' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         {{ form.as_p }}

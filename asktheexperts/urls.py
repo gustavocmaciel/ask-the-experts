@@ -24,6 +24,7 @@ urlpatterns = [
     path("downvote_answer", views.downvote_answer, name="downvote_answer"),
     path("settings", views.settings, name="settings"),
     path("settings/change-photo", views.change_photo, name="change_photo"),
+    path("settings/remove-photo", views.remove_photo, name="remove_photo"),
     path("settings/change-username", views.change_username, name="change_username"),
     path("settings/change-email", views.change_email, name="change_email"),
     path("settings/change-password", views.change_password, name="change_password"),

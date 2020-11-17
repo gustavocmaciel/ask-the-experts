@@ -11,12 +11,6 @@ from django.urls import reverse
 from .models import User, Question, Answer
 
 
-class EditProfileForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ['email']
-
-
 class ChangeImageForm(ModelForm):
     class Meta:
         model = User
@@ -158,7 +152,7 @@ def select(request):
     answer_id = request.POST["answer_id"]
     Answer.objects.filter(id=answer_id).update(selected=True)
 
-    # Update score
+    # Update answer user's score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
     new_score = answer_user_score + 15
@@ -186,17 +180,24 @@ def upvote_question(request):
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
     user.upvote_question.add(question_id)
+    user.downvote_question.remove(question_id)
 
     # Update votes number
     question = Question.objects.get(id=question_id)
     question.votes += 1
     question.save()
 
-    # Update score
+    # Update question user's score
     question_user_id = Question.objects.get(id=question_id).user_id
-    question_user_score = User.objects.get(id=question_user_id).score
-    new_score = question_user_score + 10
-    User.objects.filter(id=question_user_id).update(score=new_score)
+
+    question_user = User.objects.get(id=question_user_id)
+    question_user.score += 10
+    question_user.save()
+
+    # Update question user's score
+#    question_user_score = User.objects.get(id=question_user_id).score
+#    new_score = question_user_score + 10
+#    User.objects.filter(id=question_user_id).update(score=new_score)
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
@@ -205,14 +206,15 @@ def downvote_question(request):
     # Downvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
-    user.downvote_question.remove(question_id)
+    user.downvote_question.add(question_id)
+    user.upvote_question.remove(question_id)
 
     # Update votes number
     question = Question.objects.get(id=question_id)
     question.votes -= 1
     question.save()
 
-    # Update score
+    # Update question user's score
     question_user_id = Question.objects.get(id=question_id).user_id
     question_user_score = User.objects.get(id=question_user_id).score
     new_score = question_user_score - 2
@@ -229,17 +231,26 @@ def upvote_answer(request):
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
     user.upvote_answer.add(answer_id)
+    user.downvote_answer.remove(answer_id)
 
     # Update votes number
     answer = Answer.objects.get(id=answer_id)
     answer.votes += 1
     answer.save()
 
-    # Update score
+    # Update answer user's score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
-    answer_user_score = User.objects.get(id=answer_user_id).score
-    new_score = answer_user_score + 10
-    User.objects.filter(id=answer_user_id).update(score=new_score)
+
+    answer_user = User.objects.get(id=answer_user_id)
+    answer_user.score += 10
+    answer_user.save()
+
+
+    # Update answer user's score
+#    answer_user_id = Answer.objects.get(id=answer_id).user_id
+#    answer_user_score = User.objects.get(id=answer_user_id).score
+#    new_score = answer_user_score + 10
+#    User.objects.filter(id=answer_user_id).update(score=new_score)
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
@@ -249,14 +260,15 @@ def downvote_answer(request):
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
     user = User.objects.get(id=request.user.id)
-    user.downvote_answer.remove(answer_id)
+    user.upvote_answer.remove(answer_id)
+    user.downvote_answer.add(answer_id)
 
     # Update votes number
     answer = Answer.objects.get(id=answer_id)
     answer.votes -= 1
     answer.save()
 
-    # Update score
+    # Update answer user's score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
     new_score = answer_user_score - 2
@@ -264,7 +276,7 @@ def downvote_answer(request):
         new_score = 1
     User.objects.filter(id=answer_user_id).update(score=new_score)
 
-    # Update current user score
+    # Update current user's score
     signed_in_user_score = User.objects.get(id=request.user.id).score
     new_score = signed_in_user_score - 1
     if new_score < 1:
@@ -283,75 +295,25 @@ def settings(request):
 @login_required(login_url="login")
 def change_photo(request):
     if request.method == 'POST':
-        #form= ChangeImageForm(request.POST, request.FILES)
-        #if form.is_valid():
-        #    form.save()
-
-
-        p_form = ChangeImageForm(request.POST,request.FILES,instance=request.user.user)
-        if p_form.is_valid():
-            photo = request.POST["photo"]
-            User.objects.filter(id=request.user.id).update(photo=photo)
-        #    p_form.photo = p_form.cleaned_data["photo"]
-            #p_form.save()
-
-
-
-#    if request.method == "POST":
-#        form = ChangeImageForm(request.POST, instance=request.user)
-#        if form.is_valid():
-#            form.save()
-#            if request.FILES.get('photo', None) != None:
-#                try:
-#                    os.remove(request.user.photo.url)
-#                except Exception as e:
-#                    print('Exception in removing old profile image: ', e)
-#                request.user.photo = request.FILES['photo']
-#                request.user.save()
-
-
-
-
-#        update_profile_form = ChangeImageForm(data=request.POST, instance=user_profile)
-
-#        if update_profile_form.is_valid():
-#            profile = update_profile_form.save(commit=False)
-#            profile.username = request.user.username
-
-#            if 'photo' in request.FILES:
-#                profile.photo = request.FILES['photo']
-
-#            profile.save()
-
-
-
-
-
-#    if request.method == "POST":
-#        form = ChangeImageForm(request.POST)
-#        user = get_object_or_404(user=request.user)
-#        form = ChangeImageForm(request.POST, instance=["photo"])
-#        if form.is_valid():
-#            form.save()
-            
-        #if form.is_valid():
-            
-        #    new_photo = form.save(commit=False)
-        #    new_photo.user = request.user
-        #    new_photo.photo = form.cleaned_data["photo"]
-            #new_photo.photo = new_photo.photo
-        #    new_photo.save()
-            
-            #new_photo = form.save(commit=False)
-            #new_photo.save(update_fields=['photo'])
-
-            #User.objects.filter(id=request.user.id).update(photo=photo)
+        # Change user's profile photo
+        form = ChangeImageForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.photo = form.cleaned_data["photo"]
+            form.save()
             return HttpResponseRedirect(reverse("settings"))
-
     else:
         return render(request, "asktheexperts/change_photo.html", {
             "form": ChangeImageForm(instance=request.user)
         })
+
+
+def remove_photo(request):
+    # Replace user's profile photo with default photo
+    user = User.objects.get(id=request.user.id)
+    user.photo = 'images/default_image.jpg'
+    user.save()
+    return HttpResponseRedirect(reverse("settings"))
+
 
 @login_required(login_url="login")
 def change_username(request):

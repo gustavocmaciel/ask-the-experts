@@ -12,8 +12,17 @@
                         <button class="btn btn-sm btn-success">Change Photo</button>
                     </a>
                 </div>
-                
+                <div class="row justify-content-center" style="margin-top:10px">
+                    <form action="{% url 'remove_photo' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input class="btn btn-sm btn-danger" type="submit" value="Remove Photo">
+                        </div>
+                    </form>
+                </div>
             </div>
+            <br>
+            <br>
             <div>
                 <h3>
                     Username: {{ user.username }}
