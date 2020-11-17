@@ -9,7 +9,7 @@ class User(AbstractUser):
     downvote_question = models.ManyToManyField("Question", symmetrical=False, related_name="question_downvoted")
     downvote_answer = models.ManyToManyField("Answer", symmetrical=False, related_name="answer_downvoted")
     score = models.IntegerField(default=1)
-    joined = models.DateTimeField(auto_now_add=True)
+    joined = models.DateField(auto_now_add=True)
     #bio max 25 default="Hello, world!"
 
     def __str__(self):

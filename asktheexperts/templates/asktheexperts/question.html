@@ -108,7 +108,7 @@
 
 
                             {% if user.is_authenticated %}
-                                {% if not request.user in answer.answer_voted.all %}
+                                {% if not request.user in answer.answer_upvoted.all %}
                                 <div class="row justify-content-center">
                                     <form action="{% url 'upvote_answer' %}" method="post">
                                         {% csrf_token %}
@@ -193,7 +193,7 @@
                         <div class="voted-count">
 
                             {% if user.is_authenticated %}
-                                {% if not request.user in answer.answer_voted.all %}
+                                {% if not request.user in answer.answer_upvoted.all %}
                                 <div class="row justify-content-center">
                                     <form action="{% url 'upvote_answer' %}" method="post">
                                         {% csrf_token %}
