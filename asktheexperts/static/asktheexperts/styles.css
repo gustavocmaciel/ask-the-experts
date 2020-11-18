@@ -220,3 +220,14 @@ button:focus {
     width: 200px; 
     height: 250px;
 }
+
+#profile-question-count {
+    color: gray;
+}
+
+#profile-questions-div {
+    background-color: darkmagenta; 
+    color:white; 
+    max-width: 30px; 
+    border-radius: 8px;
+}

@@ -45,10 +45,20 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <h4>Top questions <span id="profile-question-count">({{ questions.count }})</span></h4>
             <hr>
-            <h3>Top posts</h3>
-            
-            <hr>
+            {% for question in questions %}
+                <div class="row margin-5">
+                    <div class="col" id="profile-questions-div">
+                        <div class="row justify-content-center">{{ question.answered_question.count }}</div>
+                    </div>
+                    <div class="col">
+                        <a class="no-decoration" href="{% url 'question' question.id %}"><span class="darkmagenta">{{ question.title }}</span></a>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
 
         </div>
     </div>

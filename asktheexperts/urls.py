@@ -31,6 +31,3 @@ urlpatterns = [
     path("settings/delete-account", views.delete_account, name="delete_account")
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-#if settings.DEBUG:
-#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

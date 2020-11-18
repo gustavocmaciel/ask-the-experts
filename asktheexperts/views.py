@@ -10,7 +10,8 @@ from django.urls import reverse
 from .models import User, Question, Answer
 
 
-class ChangeImageForm(ModelForm):
+# Form to change photo
+class ChangePhotoForm(ModelForm):
     class Meta:
         model = User
         fields = ['photo']
@@ -105,7 +106,7 @@ def question(request, question_id):
     # Get answers count
     answers_count = Answer.objects.filter(question=question_id).count
     # Get answers from selected question
-    answers = Answer.objects.filter(question=question_id, selected=False)
+    answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
     # Get selected answers from selected question
     selected_answers = Answer.objects.filter(question=question_id, selected=True)
     
@@ -131,8 +132,10 @@ def search(request):
 def profile(request, user_id, username):
     # Render profile page from selected user
     user = User.objects.get(id=user_id)
+    questions = Question.objects.filter(user_id=user.id).order_by("-votes")
     return render(request, "asktheexperts/profile.html", {
-        "user": user
+        "user": user,
+        "questions": questions
     })
 
 
@@ -145,6 +148,7 @@ def answer(request):
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+@login_required()
 def select(request):
     # Mark answer as selected
     question_id = request.POST["question_id"]
@@ -162,10 +166,10 @@ def select(request):
     new_score = selector_score + 2
     User.objects.filter(id=request.user.id).update(score=new_score)
 
-
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+@login_required()
 def unselect(request):
     # Unmark answer as selected
     question_id = request.POST["question_id"]
@@ -174,6 +178,7 @@ def unselect(request):
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+@login_required(login_url="login")
 def upvote_question(request):
     # Upvote question
     question_id = request.POST["question_id"]
@@ -188,19 +193,14 @@ def upvote_question(request):
 
     # Update question user's score
     question_user_id = Question.objects.get(id=question_id).user_id
-
     question_user = User.objects.get(id=question_user_id)
     question_user.score += 10
     question_user.save()
 
-    # Update question user's score
-#    question_user_score = User.objects.get(id=question_user_id).score
-#    new_score = question_user_score + 10
-#    User.objects.filter(id=question_user_id).update(score=new_score)
-
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+@login_required(login_url="login")
 def downvote_question(request):
     # Downvote question
     question_id = request.POST["question_id"]
@@ -224,6 +224,7 @@ def downvote_question(request):
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+@login_required(login_url="login")
 def upvote_answer(request):
     # Upvote answer
     question_id = request.POST["question_id"]
@@ -239,21 +240,14 @@ def upvote_answer(request):
 
     # Update answer user's score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
-
     answer_user = User.objects.get(id=answer_user_id)
     answer_user.score += 10
     answer_user.save()
 
-
-    # Update answer user's score
-#    answer_user_id = Answer.objects.get(id=answer_id).user_id
-#    answer_user_score = User.objects.get(id=answer_user_id).score
-#    new_score = answer_user_score + 10
-#    User.objects.filter(id=answer_user_id).update(score=new_score)
-
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+@login_required(login_url="login")
 def downvote_answer(request):
     # Downvote answer
     question_id = request.POST["question_id"]
@@ -295,14 +289,14 @@ def settings(request):
 def change_photo(request):
     if request.method == 'POST':
         # Change user's profile photo
-        form = ChangeImageForm(request.POST, request.FILES, instance=request.user)
+        form = ChangePhotoForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.photo = form.cleaned_data["photo"]
             form.save()
             return HttpResponseRedirect(reverse("settings"))
     else:
         return render(request, "asktheexperts/change_photo.html", {
-            "form": ChangeImageForm(instance=request.user)
+            "form": ChangePhotoForm(instance=request.user)
         })
 
 
@@ -413,6 +407,7 @@ def delete_account(request):
         password = request.POST["password"]
 
         user = authenticate(request, username=request.user.username, password=password)
+        
         # If authentication successful, delete account
         if user is not None:
             user = User.objects.get(id=request.user.id)

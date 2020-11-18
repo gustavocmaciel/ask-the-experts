@@ -10,7 +10,6 @@ class User(AbstractUser):
     downvote_answer = models.ManyToManyField("Answer", symmetrical=False, related_name="answer_downvoted")
     score = models.IntegerField(default=1)
     joined = models.DateField(auto_now_add=True)
-    #bio max 25 default="Hello, world!"
 
     def __str__(self):
         return f"{self.id} - {self.username}"
