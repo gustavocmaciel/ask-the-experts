@@ -51,11 +51,13 @@
                             {% endif %}
                         {% else %}
                             <div class="row justify-content-center">
-                                <button class="arrow" type="submit">
-                                    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                    </svg>
-                                </button>
+                                <a href="{% url 'login' %}">
+                                    <button class="arrow" type="submit">
+                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                        </svg>
+                                    </button>
+                                </a>
                             </div>
                         {% endif %}
                         
@@ -88,11 +90,13 @@
                             {% endif %}
                         {% else %}
                             <div class="row justify-content-center">
-                                <button class="arrow" type="submit">
-                                    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                    </svg>
-                                </button>
+                                <a href="{% url 'login' %}">
+                                    <button class="arrow" type="submit">
+                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </button>
+                                </a>
                             </div>
                         {% endif %}
                     </div>
@@ -148,7 +152,7 @@
 
 
                             {% if user.is_authenticated %}
-                                {% if not request.user in answer.answer_upvoted.all %}
+                                {% if not request.user in selected.answer_upvoted.all %}
                                     <div class="row justify-content-center">
                                         <form action="{% url 'upvote_answer' %}" method="post">
                                             {% csrf_token %}
@@ -170,6 +174,16 @@
                                         </button>
                                     </div>
                                 {% endif %}
+                            {% else %}
+                                <div class="row justify-content-center">
+                                    <a href="{% url 'login' %}">
+                                        <button class="arrow" type="submit">
+                                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </div>
                             {% endif %}
                             
                         </div>
@@ -177,18 +191,40 @@
                             <h4>{{ selected.votes }}</h4>
                         </div>
                         <div class="darkmagenta answers-count">
-                            <div class="row justify-content-center">
-                                <form action="{% url 'downvote_answer' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="question_id" value="{{ question.id }}">
-                                    <input type="hidden" name="answer_id" value="{{ selected.id }}">
-                                    <button class="arrow" type="submit">
-                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
+                            {% if user.is_authenticated %}
+                                {% if not request.user in selected.answer_downvoted.all %}
+                                    <div class="row justify-content-center">
+                                        <form action="{% url 'downvote_answer' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="question_id" value="{{ question.id }}">
+                                            <input type="hidden" name="answer_id" value="{{ selected.id }}">
+                                            <button class="arrow" type="submit">
+                                                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div class="row justify-content-center">
+                                        <button class="arrow" type="submit">
+                                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="#28a745" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="row justify-content-center">
+                                    <a href="{% url 'login' %}">
+                                        <button class="arrow" type="submit">
+                                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -250,11 +286,13 @@
                                 {% endif %}
                             {% else %}
                                 <div class="row justify-content-center">
-                                    <button class="arrow" type="submit">
-                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                        </svg>
-                                    </button>
+                                    <a href="{% url 'login' %}">
+                                        <button class="arrow" type="submit">
+                                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                            </svg>
+                                        </button>
+                                    </a>
                                 </div>
                             {% endif %}
                             
@@ -288,11 +326,13 @@
                                 {% endif %}
                             {% else %}
                                 <div class="row justify-content-center">
-                                    <button class="arrow" type="submit">
-                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                        </svg>
-                                    </button>
+                                    <a href="{% url 'login' %}">
+                                        <button class="arrow" type="submit">
+                                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </button>
+                                    </a>
                                 </div>
                             {% endif %}
                         </div>
