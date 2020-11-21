@@ -43,8 +43,42 @@ The **score system** works like this:
 
 `asktheexperts/templates/asktheexperts/question.html` is the file for the page where a user can view more details about the question. It shows the question `title`, the `content` (that was originally written in markdown but now is converted to html), the `username` of the user who made the question as well as the `profile photo`, and the `timestamp`. There's also a box with two `buttons`: one for `upvote` and the other to `downvote`. Only a user who is signed in can vote a question. In the same box, it also shows the number of votes the question has. Below the question, there are all the answers for this question. For each of the aswers it shows the `content` of the answer, the `username` of the user who wrote the answer, the `profile photo` of the user who wrote the answer and also the `timestamp`. For each of the answer it also has a box with two `buttons` that behave the same as the question buttons: one for `upvote` (the answer his time) and the other to `downvote`. It shows the number of votes the answer has received. If the user who is viewing this page is the one 'owner' of the question, he/she gets presented with a `button` for each of the answers where he/she can mark the answer as `selected`, or even **unselect** any answer that has been marked by him/her before. The `selected` answers shows on the top of the answers when the page gets rendered. Only users who is signed in can vote a answer. On the bottom of the page there is a `textarea` to answer the question. The answer can be written using **markdown** syntax. Only users who are signed in can answer those questions.
 
+`asktheexperts/templates/asktheexperts/search_results.html` is the file for the page that shows all the search results. It behaves just like the `asktheexperts/templates/asktheexperts/questions.html` but showing only the questions that meets the query from the search that the user has made.
+
 `asktheexperts/templates/asktheexperts/profile.html` is the file for the profile page. Each user has its own profile page that shows all of his/her *info*. It shows the `profile photo`, the `username`, a `timestamp` indicating the date when the user made his/her registration and it also has the number of questions asked and the number of the questions answered. On the bottom it has some links to the questions that have been made by this user.
 
 `asktheexperts/templates/asktheexperts/settings.html` is the file for the settings page 'layout' that can only be visited if the user is signed in. There is a `block tag` that extends the page. On the left side of the page there are four `buttons` that redirects to pages where a user can change his username, password, or even delete the account.
 
-`asktheexperts/templates/asktheexperts/account_info.html` It has a page showing the main *info* of the **user who is signed in**, it shows the `profile photo`, the `username` and the `password` (with asteriscs). It also has a button with a link that redirects to the page where a user can change the `profile photo`. Below this button there is another button to `remove` the current `profile photo`.
+`asktheexperts/templates/asktheexperts/account_info.html` is the file for the page that shows the main *info* of the **user who is signed in**, it shows the `profile photo`, the `username` and the `password` (with asteriscs). It also has a button with a link that redirects to the page where a user can change the `profile photo`. Below this button there is another button to `remove` the current `profile photo`.
+
+`asktheexperts/templates/asktheexperts/change_photo.html` is the file for the page where a user can change his/her `profile photo` by submmiting a form.
+
+`asktheexperts/templates/asktheexperts/change_username.html` is the file for the page where a user can change his/her `username ` by submmiting a form.
+
+`asktheexperts/templates/asktheexperts/change_email.html` is the file for the page where a user can change his/her `email` by submmiting a form.
+
+`asktheexperts/templates/asktheexperts/change_password.html` is the file for the page where a user can change his/her `password` by submmiting a form.
+
+`asktheexperts/templates/asktheexperts/delete_account` is the file for the page where a user can delete his/her account. It has a form where the user has to type his/her password and by submmiting the button, the account gets deleted.
+
+`asktheexperts/static/asktheexperts/styles.css` is the file that contains all of the `CSS` for the project.
+
+`asktheexperts/static/asktheexperts/main.js` is the file that contains all of the `Javascript` functions for the project.
+
+## Distinctiveness and Complexity
+
+This project is `sufficiently distinct` from the other projects of this course because it is **not** a Search Page like Google, it is **not** an Online Encyclopedia, it is **not** a E-Commerce website, it is **not** a Email Client and it is **not** a Social Media. It **is**, in fact, a web application for asking and answering programming questions where users can have a score based on the the votes him/her questions and/or answers receives from other users.
+
+This project is also `more complex` than the previous projects because it has a score system based on the action that every single user makes on the website, but a user **cannot** have a score lower than `1` . It has search function that searches the database for questions that meets the search query and returns only the questions that meets the query. Each user has a default profile photo that can be changed by him/her later, or even removed (which in this case just sets the photo back to the default photo). It has functions to change the username, password, email and also delete the entire account. I has not only the option to upvote a question and/or answer but also to downvote (each question and/or answer can have a negative number of votes).
+
+It *also* meets the requirements because:
+- It does utilize Django (including at least one model (it has three models)) on the back-end and Javascript on the front-end.
+- It is mobile responsive. I used Bootstrap, which already makes the web application mobile responsive. I added the required the `meta tags` to the `asktheexperts/templates/asktheexperts/layout.html` file.
+
+## Python packages
+
+All the Python packages that need to be installed to run this web application are **included** in the [requirements.txt](requirements.txt) file.
+
+## Author
+
+Gustavo Maciel
