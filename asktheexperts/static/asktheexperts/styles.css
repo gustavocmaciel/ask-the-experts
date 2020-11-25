@@ -11,8 +11,9 @@ body {
     
 }
 
-#index-div {
+.index-div {
     max-height: 500px;
+    position: relative;
 }
 
 /* Register/Login page */
@@ -69,6 +70,10 @@ body {
 
 .no-decoration:hover {
     text-decoration: none;
+}
+
+#animate {
+    position: absolute;
 }
 
 /* Questions page */

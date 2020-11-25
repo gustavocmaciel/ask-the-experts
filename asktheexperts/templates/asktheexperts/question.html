@@ -344,14 +344,13 @@
 
             <!--Send answer form-->
             <div id="send-answer-div">
-            <form action="{% url 'answer' %}" method="post">
-                {% csrf_token %}
+            <form id="send-answer-form" onsubmit="SendAnswer()" >
                 <div class="form-group">
                     <label><strong>Your Answer</strong></label>
-                    <textarea class="form-control" type="textarea" name="content" placeholder="Answer" required></textarea>
+                    <textarea id="answer-content" class="form-control" type="textarea" name="content" placeholder="Answer" required></textarea>
                 </div>
-                <input type="hidden" name="question_id" value="{{ question.id }}">
-                <input class="btn btn-block btn-success send-btn" type="submit" value="Send Answer">
+                <input id="question-id" type="hidden" name="question_id" value="{{ question.id }}">
+                <input id="send-answer" class="btn btn-block btn-success send-btn" type="submit" value="Send Answer">
                 <br>
             </form>
             </div>

@@ -15,17 +15,17 @@ The **score system** works like this:
 
 ## Files
 
-`asktheexperts/models.py` is where all the models are defined. There are `three` models: 
+In `asktheexperts/models.py`, all the models are defined. There are `three` models: 
 
 - The `User` model represents each user registered in the application. It also has four many-to-many fields related to the `Question` model and the `Answer` model to keep track of which user upvoted or downvoted which question or answer.
 - The `Question` model represents each question that are made, it also has a `vote` field with the default value of `0` to store the number of votes.
 - The `Answer` model represents all the answers of those question. It also has a field called `selected` which is a Boolean field that indicate if this answer was marked as selected or not (the default is `False`).
 
-`asktheexperts/urls.py` is where all the URL configuration of the app is defined, which means all of the url paths *live* there.
+In `asktheexperts/urls.py`, all the URL configuration of the app is defined, which means all of the url paths *live* there.
 
-`asktheexperts/views.py` is where all the views associated with each of the routes are defined. There are 23 views in total and the majority of them have the `@loginrequired` decorator to prevent a user who is not signed in from accessing any of those views. In this file there's also a form to change the profile photo called `ChangePhotoForm`.
+In `asktheexperts/views.py`, all the views associated with each of the routes are defined. There are 23 views in total and the majority of them have the `@loginrequired` decorator to prevent a user who is not signed in from accessing any of those views. In this file there's also a form to change the profile photo called `ChangePhotoForm`.
 
-`asktheexperts/admin.py` is where the models that can be accessed in the `admin` page are registerd. All the models *are* registered so the administrator has total control of the database.
+In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page are registerd. All the models *are* registered so the administrator has total control of the database.
 
 `asktheexperts/templates/asktheexperts/layout.html` is the HTML layout of this application. The `nav-bar` is in this file.
 
@@ -33,7 +33,7 @@ The **score system** works like this:
 
 `asktheexperts/templates/asktheexperts/login.html` is the file for the login page where a user can login. it has a form with two fields: `username` and `password` as the `submit button`.
 
-`asktheexperts/templates/asktheexperts/index.html` is the file for the index page that works more like an arrival page since it only has a *descriptive* message and two buttons: One that redirects to the page with all of the questions made on the website and the other redirects to the page where a user can ask a question.
+`asktheexperts/templates/asktheexperts/index.html` is the file for the index page that works like an landing page since it only has a *descriptive* message and two buttons: One that redirects to the page with all of the questions made on the website and the other redirects to the page where a user can ask a question.
 
 `asktheexperts/templates/asktheexperts/ask_question.html` is the file for the page where a user who is signed in can ask as question. It has a form with two fields: one for the `title` of the question and the other for the `content` of the question that can be written using **markdown** syntax.
 

@@ -1,4 +1,7 @@
+import json
+from django.http import JsonResponse
 from django import forms
+from django.core.paginator import Paginator
 from django.forms import ModelForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -75,7 +78,12 @@ def register(request):
 
 def questions(request):
     # Get all questions
-    questions = Question.objects.all().order_by("-timestamp")
+    all_questions = Question.objects.all().order_by("-timestamp")
+
+    # Add pagination
+    paginator = Paginator(all_questions, 1)
+    page_number = request.GET.get('page')
+    questions = paginator.get_page(page_number)
 
     return render(request, "asktheexperts/questions.html", {
         "questions": questions
@@ -131,10 +139,10 @@ def search(request):
 
 def profile(request, user_id, username):
     # Render profile page from selected user
-    user = User.objects.get(id=user_id)
-    questions = Question.objects.filter(user_id=user.id).order_by("-votes")
+    user_profile = User.objects.get(id=user_id)
+    questions = Question.objects.filter(user_id=user_profile.id).order_by("-votes")
     return render(request, "asktheexperts/profile.html", {
-        "user": user,
+        "user_profile": user_profile,
         "questions": questions
     })
 
@@ -277,6 +285,23 @@ def downvote_answer(request):
     User.objects.filter(id=request.user.id).update(score=new_score)
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
+
+
+@login_required()
+def report_user(request):
+    if request.method == "POST":
+        reported_user = request.POST["reported_user"]
+        return render(request, "asktheexperts/report_user.html", {
+            "reported_user": reported_user
+        })
+
+
+@login_required()
+def send_report(request):
+
+    # Send report must be via POST
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 @login_required(login_url="login")
