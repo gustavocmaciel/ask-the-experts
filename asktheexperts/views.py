@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 import json
 from django.http import JsonResponse
 from django import forms
@@ -71,6 +72,16 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
+
+        # Send a welcome email to the new registered user
+        send_mail(
+            'Subject here',
+            'Here is the message.',
+            'noreply@asktheexperts.com',
+            ['to@example.com'],
+            fail_silently=False,
+        )
+
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "asktheexperts/register.html")
@@ -287,6 +298,7 @@ def downvote_answer(request):
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
+# FIXME: Maybe this can be removed
 @login_required()
 def report_user(request):
     if request.method == "POST":
@@ -296,12 +308,50 @@ def report_user(request):
         })
 
 
+# FIXME: This looks better
 @login_required()
 def send_report(request):
 
     # Send report must be via POST
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
+
+    # Check recipient reason
+    # This is still part of version 1 and I'm not sure
+    data = json.loads(request.body)
+    emails = [email.strip() for email in data.get("reason").split(",")]
+    if emails == [""]:
+        return JsonResponse({
+            "error": "At least one reason required."
+        }, status=400)
+    # ------------------------------------------------
+
+
+    # Get contents of email
+    reported_user = data.get("reportedUser", "")
+    reason = data.get("reason", "")
+
+    # Create one email for each recipient, plus sender
+    # This version doesn't look the best
+#    email = Email(
+#        reported_useruser=reported_user,
+#        reporting=request.user,
+#        reason=reason,
+#    )
+#    email.save()
+    # ------------------------------------------------
+
+
+    # Another version ----------
+#    post = Post.objects.get(id= post_id)
+#    if data.get("reason") is not None:
+#        post.content = data["reason"]
+#        post.content = data["reason"]
+#        post.save()
+#    return HttpResponse(status=204)
+    # --------------------------
+
+    return JsonResponse({"message": "Email sent successfully."}, status=201)
 
 
 @login_required(login_url="login")

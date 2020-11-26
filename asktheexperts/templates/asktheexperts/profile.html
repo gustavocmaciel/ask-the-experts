@@ -7,7 +7,7 @@
 
 {% block body %}
 
-    <div class="container questions white-div">
+    <div id="profile-view" class="container questions white-div">
         <div class="container top-header">
             <h2 class="darkmagenta">Profile</h2>
         </div>
@@ -45,11 +45,16 @@
                     </div>
                     <br>
                     {% if not request.user == user_profile %}
+                    <button class="btn btn-sm btn-outline-danger" id="report">Report User</button>
+                    
+                    <!-- Remove this-->
                     <form action="{% url 'report_user' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="reported_user" value="{{ user_profile.username }}">
                         <input class="btn btn-sm btn-outline-danger" type="submit" value="Report User">
                     </form>
+                    <!--End remove-->
+
                     {% endif %}
                 </div>
             </div>
@@ -67,6 +72,30 @@
                 </div>
                 <hr>
             {% endfor %}
+
+        </div>
+    </div>
+
+    <div id="report-form-view" class="container questions">
+        <br>
+        <div>
+            <h2 class="darkmagenta">Report: {{ user_profile.username }}</h2>
+        </div>
+        <div>
+
+            <!--Report user form-->
+            <form id="report-user-form">
+                <div class="form-group">
+                    <label><strong>Reason</strong></label>
+                    <textarea id="reason" class="form-control" type="textarea" name="reason" placeholder="Reason" required></textarea>
+                </div>
+                <input type="hidden" id="reported-user" name="reported_user" value="{{ user_profile.id }}">
+                <input class="btn btn-block btn-danger send-btn" type="submit" value="Report User">
+                <br>
+            </form>
+            
+            <!--Remove this comment-->
+            <!--Report user form end-->
 
         </div>
     </div>

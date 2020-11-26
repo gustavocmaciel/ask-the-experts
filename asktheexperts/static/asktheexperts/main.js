@@ -1,4 +1,32 @@
-document.querySelector('#report-user-form').onsubmit = reportUser;
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelector('#report').addEventListener('click', reportForm);
+
+  loadProfilePage();
+});
+
+function loadProfilePage(){
+
+  // Show compose view and hide other views
+  document.querySelector('#profile-view').style.display = 'block';
+  document.querySelector('#report-form-view').style.display = 'none';
+}
+
+function reportForm() {
+
+  // Show compose view and hide other views
+  document.querySelector('#profile-view').style.display = 'none';
+  document.querySelector('#report-form-view').style.display = 'block';
+
+  // FIXME: Not sure
+  // Clear out composition fields
+  document.querySelector('#reported-user').value = '';
+  document.querySelector('#reason').value = '';
+
+  // Send report
+  document.querySelector('#report-user-form').onsubmit = reportUser;
+}
+
+//document.querySelector('#report-user-form').onsubmit = reportUser;
 
 function reportUser() {
   event.preventDefault();
@@ -24,6 +52,7 @@ function reportUser() {
       return false;
     } else {
       console.log(result);
+      loadProfilePage();
       return false;
     }
   })
