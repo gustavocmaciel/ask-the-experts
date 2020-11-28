@@ -11,7 +11,7 @@ from django.db import IntegrityError
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 
-from .models import User, Question, Answer
+from .models import User, Question, Answer, Reported_User
 
 
 # Form to change photo
@@ -319,13 +319,12 @@ def send_report(request):
     # Check recipient reason
     # This is still part of version 1 and I'm not sure
     data = json.loads(request.body)
-    emails = [email.strip() for email in data.get("reason").split(",")]
-    if emails == [""]:
+    textarea = [reason.strip() for reason in data.get("reason").split(",")]
+    if textarea == [""]:
         return JsonResponse({
-            "error": "At least one reason required."
+            "error": "You should provide a reason."
         }, status=400)
     # ------------------------------------------------
-
 
     # Get contents of email
     reported_user = data.get("reportedUser", "")
@@ -333,12 +332,11 @@ def send_report(request):
 
     # Create one email for each recipient, plus sender
     # This version doesn't look the best
-#    email = Email(
-#        reported_useruser=reported_user,
-#        reporting=request.user,
-#        reason=reason,
-#    )
-#    email.save()
+    reported_user = Reported_User(
+        reported_user=reported_user,
+        reason=reason,
+    )
+    reported_user.save()
     # ------------------------------------------------
 
 

@@ -79,7 +79,7 @@
     <div id="report-form-view" class="container questions">
         <br>
         <div>
-            <h2 class="darkmagenta">Report: {{ user_profile.username }}</h2>
+            <h2 class="darkmagenta">Report User: {{ user_profile.username }}</h2>
         </div>
         <div>
 
@@ -90,12 +90,9 @@
                     <textarea id="reason" class="form-control" type="textarea" name="reason" placeholder="Reason" required></textarea>
                 </div>
                 <input type="hidden" id="reported-user" name="reported_user" value="{{ user_profile.id }}">
-                <input class="btn btn-block btn-danger send-btn" type="submit" value="Report User">
+                <input class="btn btn-block btn-danger send-btn" type="submit" value="Report">
                 <br>
             </form>
-            
-            <!--Remove this comment-->
-            <!--Report user form end-->
 
         </div>
     </div>
