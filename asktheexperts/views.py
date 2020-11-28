@@ -299,18 +299,18 @@ def downvote_answer(request):
 
 
 # FIXME: Maybe this can be removed
-@login_required()
-def report_user(request):
-    if request.method == "POST":
-        reported_user = request.POST["reported_user"]
-        return render(request, "asktheexperts/report_user.html", {
-            "reported_user": reported_user
-        })
+#@login_required()
+#def report_user(request):
+#    if request.method == "POST":
+#        reported_user = request.POST["reported_user"]
+#        return render(request, "asktheexperts/report_user.html", {
+#            "reported_user": reported_user
+#        })
 
 
 # FIXME: This looks better
 @login_required()
-def send_report(request):
+def report_user(request):
 
     # Send report must be via POST
     if request.method != "POST":
@@ -319,21 +319,23 @@ def send_report(request):
     # Check recipient reason
     # This is still part of version 1 and I'm not sure
     data = json.loads(request.body)
-    textarea = [reason.strip() for reason in data.get("reason").split(",")]
-    if textarea == [""]:
-        return JsonResponse({
-            "error": "You should provide a reason."
-        }, status=400)
+    #textarea = [reason.strip() for reason in data.get("reason").split(",")]
+    #if textarea == [""]:
+    #    return JsonResponse({
+    #        "error": "You should provide a reason."
+    #    }, status=400)
     # ------------------------------------------------
 
-    # Get contents of email
+    # Get contents of form
     reported_user = data.get("reportedUser", "")
     reason = data.get("reason", "")
+#    print(reported_user_id)
+    reported_user_id = User.objects.get(id=reported_user)
 
     # Create one email for each recipient, plus sender
     # This version doesn't look the best
     reported_user = Reported_User(
-        reported_user=reported_user,
+        reported_user=reported_user_id,
         reason=reason,
     )
     reported_user.save()
@@ -349,7 +351,7 @@ def send_report(request):
 #    return HttpResponse(status=204)
     # --------------------------
 
-    return JsonResponse({"message": "Email sent successfully."}, status=201)
+    return JsonResponse({"message": "Report sent successfully."}, status=201)
 
 
 @login_required(login_url="login")

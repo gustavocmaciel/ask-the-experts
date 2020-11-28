@@ -19,7 +19,7 @@ function reportForm() {
 
   // FIXME: Not sure
   // Clear out composition fields
-  document.querySelector('#reported-user').value = '';
+  //document.querySelector('#reported-user').value = '';
   document.querySelector('#reason').value = '';
 
   // Send report
@@ -35,7 +35,9 @@ function reportUser() {
   const reportedUser = document.querySelector('#reported-user').value;
   const reason = document.querySelector('#reason').value;
 
-  fetch('/send_report', {
+  console.log(reportedUser);
+
+  fetch('/report_user', {
     method: 'POST',
     headers: {'X-CSRFToken': csrftoken},
     mode: 'same-origin',
@@ -46,16 +48,17 @@ function reportUser() {
   })
   .then(response => response.json())
   .then(result => {
-    if (result.message !== "Email sent successfully.") {
-      console.log(result);
-      alert(result.error);
-      return false;
-    } else {
+    //if (result.message !== "Report sent successfully.") {
+    //  console.log(result);
+    //  alert(result.error);
+    //  return false;
+    //} else {
       console.log(result);
       loadProfilePage();
       return false;
     }
-  })
+  //}
+  )
   .catch(error => {
     console.log('Error:', error);
   });

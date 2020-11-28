@@ -40,7 +40,7 @@ class Answer(models.Model):
 
 class Reported_User(models.Model):
     ##reporting_user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="reporting_user")
-    reported_user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="reported_user")
+    reported_user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="reported_user_id")
     reason = models.TextField(max_length=255)
 
     def __str__(self):
