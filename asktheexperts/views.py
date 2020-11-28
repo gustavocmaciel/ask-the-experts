@@ -91,6 +91,7 @@ def questions(request):
     # Get all questions
     all_questions = Question.objects.all().order_by("-timestamp")
 
+    # FIXME: Check this
     # Add pagination
     paginator = Paginator(all_questions, 1)
     page_number = request.GET.get('page')
@@ -298,17 +299,6 @@ def downvote_answer(request):
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
-# FIXME: Maybe this can be removed
-#@login_required()
-#def report_user(request):
-#    if request.method == "POST":
-#        reported_user = request.POST["reported_user"]
-#        return render(request, "asktheexperts/report_user.html", {
-#            "reported_user": reported_user
-#        })
-
-
-# FIXME: This looks better
 @login_required()
 def report_user(request):
 
@@ -316,41 +306,19 @@ def report_user(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
 
-    # Check recipient reason
-    # This is still part of version 1 and I'm not sure
+    # Get form data
     data = json.loads(request.body)
-    #textarea = [reason.strip() for reason in data.get("reason").split(",")]
-    #if textarea == [""]:
-    #    return JsonResponse({
-    #        "error": "You should provide a reason."
-    #    }, status=400)
-    # ------------------------------------------------
-
-    # Get contents of form
     reported_user = data.get("reportedUser", "")
     reason = data.get("reason", "")
-#    print(reported_user_id)
+    
     reported_user_id = User.objects.get(id=reported_user)
 
-    # Create one email for each recipient, plus sender
-    # This version doesn't look the best
+    # Save report
     reported_user = Reported_User(
-        reported_user=reported_user_id,
+        user=reported_user_id,
         reason=reason,
     )
     reported_user.save()
-    # ------------------------------------------------
-
-
-    # Another version ----------
-#    post = Post.objects.get(id= post_id)
-#    if data.get("reason") is not None:
-#        post.content = data["reason"]
-#        post.content = data["reason"]
-#        post.save()
-#    return HttpResponse(status=204)
-    # --------------------------
-
     return JsonResponse({"message": "Report sent successfully."}, status=201)
 
 

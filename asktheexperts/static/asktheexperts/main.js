@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadProfilePage(){
 
-  // Show compose view and hide other views
+  // Show report-form-view and hide profile-view
   document.querySelector('#profile-view').style.display = 'block';
   document.querySelector('#report-form-view').style.display = 'none';
 }
@@ -17,16 +17,12 @@ function reportForm() {
   document.querySelector('#profile-view').style.display = 'none';
   document.querySelector('#report-form-view').style.display = 'block';
 
-  // FIXME: Not sure
-  // Clear out composition fields
-  //document.querySelector('#reported-user').value = '';
+  // Clear reason field
   document.querySelector('#reason').value = '';
 
   // Send report
   document.querySelector('#report-user-form').onsubmit = reportUser;
 }
-
-//document.querySelector('#report-user-form').onsubmit = reportUser;
 
 function reportUser() {
   event.preventDefault();
@@ -34,8 +30,6 @@ function reportUser() {
   // Get reported user and reason from form
   const reportedUser = document.querySelector('#reported-user').value;
   const reason = document.querySelector('#reason').value;
-
-  console.log(reportedUser);
 
   fetch('/report_user', {
     method: 'POST',
@@ -48,17 +42,10 @@ function reportUser() {
   })
   .then(response => response.json())
   .then(result => {
-    //if (result.message !== "Report sent successfully.") {
-    //  console.log(result);
-    //  alert(result.error);
-    //  return false;
-    //} else {
-      console.log(result);
-      loadProfilePage();
-      return false;
-    }
-  //}
-  )
+    console.log(result);
+    loadProfilePage();
+    return false;
+    })
   .catch(error => {
     console.log('Error:', error);
   });
