@@ -17,6 +17,8 @@ Any user on this website can report any other user if he/she notices some kind o
 
 ## Files
 
+The `capstone` project contains a single app called `asktheexperts`.
+
 In `asktheexperts/models.py`, all the models are defined. There are `four` models: 
 
 - The `User` model represents each user registered in the application. It also has four many-to-many fields related to the `Question` model and the `Answer` model to keep track of which user upvoted or downvoted which question or answer.
@@ -24,13 +26,13 @@ In `asktheexperts/models.py`, all the models are defined. There are `four` model
 - The `Answer` model represents all the answers of those question. It also has a field called `selected` which is a Boolean field that indicate if this answer was marked as selected or not (the default is `False`).
 - The `Reported_User` model represents the users that have been reported. It also has field called `solved` which is a Boolean field that indicates if this report issue has been solved by the site administrator (the default is `False`).
 
-In `asktheexperts/urls.py`, all the URL configuration of the app is defined, which means all the url paths are there.
+In `asktheexperts/urls.py`, all the URL configuration of the app is defined, which means all the routes are included in this file.
 
 In `asktheexperts/views.py`, all the views associated with each of the routes are defined. There are 24 views in total and the majority of them have the `@loginrequired` decorator to prevent a user who is not signed in from accessing any of those views. In this file there's also a form to change the profile photo called `ChangePhotoForm`.
 
 In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page are registerd. *All* the models are registered so the site administrator has total control of the database.
 
-`asktheexperts/templates/asktheexperts/layout.html` is the HTML layout of this application. The `nav-bar` has a link that redirects to the `Index` page. A link that redirects to the `Questions` page. A Search Form. A link that redirects to the `Log In` page. A link that redirects to the `Register` page. If the user is logged in: a link that redirects to the `Ask Question` page. A link that redirects to the signed in user's profile page. A link that redirects to the `settings` page. A link to `Log Out`.
+`asktheexperts/templates/asktheexperts/layout.html` is the HTML layout of this application. The `nav-bar` has a search field and also has links that redirects to the `Index` page, to the `Questions` page, to the `Log In` page, to the `Register` page, to the `Ask Question` page, to the signed in user's profile page, to the `settings` page, and a link to `Log Out`. A few links are wrapped in a check for if `user.is_authenticated`.
 
 `asktheexperts/templates/asktheexperts/register.html` is the file for the register page where a user can make his/her registration. It has a form with four fields: `username`, `email`, `password`, `confirm password` as long with the `submit button`.
 

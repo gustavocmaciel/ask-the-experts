@@ -91,7 +91,6 @@ def questions(request):
     # Get all questions
     all_questions = Question.objects.all().order_by("-timestamp")
 
-    # FIXME: Check this
     # Add pagination
     paginator = Paginator(all_questions, 1)
     page_number = request.GET.get('page')
@@ -129,7 +128,6 @@ def question(request, question_id):
     # Get answers from selected question
     all_answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
 
-    # FIXME: Check this comment
     # Add pagination to answers
     paginator = Paginator(all_answers, 1)
     page_number = request.GET.get('page')
@@ -151,16 +149,15 @@ def search(request):
     q = request.GET["q"]
     all_results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
 
-    # FIXME: Not sure    
     # Add pagination to results
     paginator = Paginator(all_results, 1)
     page_number = request.GET.get('page')
     results = paginator.get_page(page_number)
     
     return render(request, "asktheexperts/search_results.html", {
+        "all_questions": all_results,
         "questions": results,
         "q": q
-
     })
 
 
