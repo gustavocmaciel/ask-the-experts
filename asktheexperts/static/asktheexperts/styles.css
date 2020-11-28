@@ -3,12 +3,17 @@
 }
 
 body {
+    /*
+    I wanted to make the background image cover the whole window. 
+    After some online search, I've found this example on 
+    https://css-tricks.com/perfect-full-page-background-image/#awesome-easy-progressive-css3-way
+    and it worked just fine. 
+    */
     background: url('/static/background.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    
 }
 
 .index-div {
