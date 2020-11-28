@@ -98,7 +98,8 @@ def questions(request):
     questions = paginator.get_page(page_number)
 
     return render(request, "asktheexperts/questions.html", {
-        "questions": questions
+        "questions": questions,
+        "all_questions": all_questions
     })
 
 
@@ -126,7 +127,14 @@ def question(request, question_id):
     # Get answers count
     answers_count = Answer.objects.filter(question=question_id).count
     # Get answers from selected question
-    answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
+    all_answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
+
+    # FIXME: Check this comment
+    # Add pagination to answers
+    paginator = Paginator(all_answers, 1)
+    page_number = request.GET.get('page')
+    answers = paginator.get_page(page_number)
+
     # Get selected answers from selected question
     selected_answers = Answer.objects.filter(question=question_id, selected=True)
     
@@ -141,7 +149,14 @@ def question(request, question_id):
 def search(request):
     # Search
     q = request.GET["q"]
-    results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
+    all_results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
+
+    # FIXME: Not sure    
+    # Add pagination to results
+    paginator = Paginator(all_results, 1)
+    page_number = request.GET.get('page')
+    results = paginator.get_page(page_number)
+    
     return render(request, "asktheexperts/search_results.html", {
         "questions": results,
         "q": q
@@ -152,7 +167,9 @@ def search(request):
 def profile(request, user_id, username):
     # Render profile page from selected user
     user_profile = User.objects.get(id=user_id)
-    questions = Question.objects.filter(user_id=user_profile.id).order_by("-votes")
+
+    #FIXME: Check this limit
+    questions = Question.objects.filter(user_id=user_profile.id).order_by("-votes")[:10]
     return render(request, "asktheexperts/profile.html", {
         "user_profile": user_profile,
         "questions": questions
@@ -322,13 +339,13 @@ def report_user(request):
     return JsonResponse({"message": "Report sent successfully."}, status=201)
 
 
-@login_required(login_url="login")
+@login_required()
 def settings(request):
     # Render signed in user's settings page
     return render(request, "asktheexperts/account_info.html")
 
 
-@login_required(login_url="login")
+@login_required()
 def change_photo(request):
     if request.method == 'POST':
         # Change user's profile photo
@@ -343,6 +360,7 @@ def change_photo(request):
         })
 
 
+@login_required()
 def remove_photo(request):
     # Replace user's profile photo with default photo
     user = User.objects.get(id=request.user.id)
@@ -351,7 +369,7 @@ def remove_photo(request):
     return HttpResponseRedirect(reverse("settings"))
 
 
-@login_required(login_url="login")
+@login_required()
 def change_username(request):
     # Change username
     if request.method == "POST":
@@ -377,7 +395,7 @@ def change_username(request):
         })
 
 
-@login_required(login_url="login")
+@login_required()
 def change_email(request):
     # Change email
     if request.method == "POST":
@@ -403,7 +421,7 @@ def change_email(request):
         })
 
 
-@login_required(login_url="login")
+@login_required()
 def change_password(request):
     # Change password
     if request.method == "POST":
@@ -441,7 +459,7 @@ def change_password(request):
     })
 
 
-@login_required(login_url="login")
+@login_required()
 def delete_account(request):
     # Delete user's account
     if request.method == "POST":

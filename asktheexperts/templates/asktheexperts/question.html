@@ -342,9 +342,29 @@
                 <hr>
             {% endfor %}
 
+            <!--Pagination links-->
+            <div class="pagination justify-content-center">
+                <span class="step-links">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify content-center">
+                            {% if answers.has_previous %}
+                                <li class="page-item"><a class="btn btn-sm btn-outline-success" href="?page={{ answers.previous_page_number }}">previous</a></li>
+                            {% endif %}
+                            {% if answers.has_next %}
+                                <li class="page-item"><a class="btn btn-sm btn-outline-success" href="?page={{ answers.next_page_number }}">next</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                <span class="current">
+                    Page {{ answers.number }} of {{ answers.paginator.num_pages }}.
+                </span>
+                </span>
+            </div>
+
             <!--Send answer form-->
             <div id="send-answer-div">
-            <form id="send-answer-form" onsubmit="SendAnswer()" >
+            <form action="{% url 'answer' %}" method="post">
+                {% csrf_token %}
                 <div class="form-group">
                     <label><strong>Your Answer</strong></label>
                     <textarea id="answer-content" class="form-control" type="textarea" name="content" placeholder="Answer" required></textarea>

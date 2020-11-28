@@ -32,6 +32,5 @@ urlpatterns = [
 
     # API route
     path("report_user", views.report_user, name="report_user"),
-    #path("send_report", views.send_report, name="send_report")
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

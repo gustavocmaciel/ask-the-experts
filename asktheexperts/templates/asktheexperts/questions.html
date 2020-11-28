@@ -15,7 +15,7 @@ Questions - Ask the Experts
         <div class="container count-buttons-div">
             <div class="row questions-count">
                 <div class="col">
-                    <h3>{{ questions.count }} {% if questions.count == 1 %} question{% else %} questions{% endif %}</h3>
+                    <h3>{{ all_questions.count }} {% if all_questions.count == 1 %} question{% else %} questions{% endif %}</h3>
                 </div>
                 <div class="col">
                     <button class="btn btn-sm btn-outline-success">Most recent</button>
@@ -83,6 +83,7 @@ Questions - Ask the Experts
                 </span>
                 </span>
             </div>
+            
         </div>
     </div>
 

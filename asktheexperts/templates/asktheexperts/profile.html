@@ -44,18 +44,11 @@
                         </div>
                     </div>
                     <br>
+
                     {% if not request.user == user_profile %}
                     <button class="btn btn-sm btn-outline-danger" id="report">Report User</button>
-                    
-                    <!-- Remove this-->
-                    <form action="{% url 'report_user' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="reported_user" value="{{ user_profile.username }}">
-                        <input class="btn btn-sm btn-outline-danger" type="submit" value="Report User">
-                    </form>
-                    <!--End remove-->
-
                     {% endif %}
+                    
                 </div>
             </div>
             <br>
@@ -76,6 +69,7 @@
         </div>
     </div>
 
+    {% if not request.user == user_profile %}
     <div id="report-form-view" class="container questions">
         <br>
         <div>
@@ -96,6 +90,7 @@
 
         </div>
     </div>
+    {% endif %}
 
 {% endblock %}
 
