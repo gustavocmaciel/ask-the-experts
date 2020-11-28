@@ -1,4 +1,8 @@
+from django.core.mail import send_mail
+import json
+from django.http import JsonResponse
 from django import forms
+from django.core.paginator import Paginator
 from django.forms import ModelForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -7,7 +11,7 @@ from django.db import IntegrityError
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 
-from .models import User, Question, Answer
+from .models import User, Question, Answer, Reported_User
 
 
 # Form to change photo
@@ -68,6 +72,16 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
+
+        # Send a welcome email to the new registered user
+        send_mail(
+            'Subject here',
+            'Here is the message.',
+            'noreply@asktheexperts.com',
+            ['to@example.com'],
+            fail_silently=False,
+        )
+
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "asktheexperts/register.html")
@@ -75,10 +89,16 @@ def register(request):
 
 def questions(request):
     # Get all questions
-    questions = Question.objects.all().order_by("-timestamp")
+    all_questions = Question.objects.all().order_by("-timestamp")
+
+    # Add pagination
+    paginator = Paginator(all_questions, 1)
+    page_number = request.GET.get('page')
+    questions = paginator.get_page(page_number)
 
     return render(request, "asktheexperts/questions.html", {
-        "questions": questions
+        "questions": questions,
+        "all_questions": all_questions
     })
 
 
@@ -106,7 +126,13 @@ def question(request, question_id):
     # Get answers count
     answers_count = Answer.objects.filter(question=question_id).count
     # Get answers from selected question
-    answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
+    all_answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
+
+    # Add pagination to answers
+    paginator = Paginator(all_answers, 1)
+    page_number = request.GET.get('page')
+    answers = paginator.get_page(page_number)
+
     # Get selected answers from selected question
     selected_answers = Answer.objects.filter(question=question_id, selected=True)
     
@@ -121,20 +147,28 @@ def question(request, question_id):
 def search(request):
     # Search
     q = request.GET["q"]
-    results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
+    all_results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
+
+    # Add pagination to results
+    paginator = Paginator(all_results, 1)
+    page_number = request.GET.get('page')
+    results = paginator.get_page(page_number)
+    
     return render(request, "asktheexperts/search_results.html", {
+        "all_questions": all_results,
         "questions": results,
         "q": q
-
     })
 
 
 def profile(request, user_id, username):
     # Render profile page from selected user
-    user = User.objects.get(id=user_id)
-    questions = Question.objects.filter(user_id=user.id).order_by("-votes")
+    user_profile = User.objects.get(id=user_id)
+
+    #FIXME: Check this limit
+    questions = Question.objects.filter(user_id=user_profile.id).order_by("-votes")[:10]
     return render(request, "asktheexperts/profile.html", {
-        "user": user,
+        "user_profile": user_profile,
         "questions": questions
     })
 
@@ -279,13 +313,36 @@ def downvote_answer(request):
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
 
 
-@login_required(login_url="login")
+@login_required()
+def report_user(request):
+
+    # Send report must be via POST
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    # Get form data
+    data = json.loads(request.body)
+    reported_user = data.get("reportedUser", "")
+    reason = data.get("reason", "")
+    
+    reported_user_id = User.objects.get(id=reported_user)
+
+    # Save report
+    reported_user = Reported_User(
+        user=reported_user_id,
+        reason=reason,
+    )
+    reported_user.save()
+    return JsonResponse({"message": "Report sent successfully."}, status=201)
+
+
+@login_required()
 def settings(request):
     # Render signed in user's settings page
     return render(request, "asktheexperts/account_info.html")
 
 
-@login_required(login_url="login")
+@login_required()
 def change_photo(request):
     if request.method == 'POST':
         # Change user's profile photo
@@ -300,6 +357,7 @@ def change_photo(request):
         })
 
 
+@login_required()
 def remove_photo(request):
     # Replace user's profile photo with default photo
     user = User.objects.get(id=request.user.id)
@@ -308,7 +366,7 @@ def remove_photo(request):
     return HttpResponseRedirect(reverse("settings"))
 
 
-@login_required(login_url="login")
+@login_required()
 def change_username(request):
     # Change username
     if request.method == "POST":
@@ -334,7 +392,7 @@ def change_username(request):
         })
 
 
-@login_required(login_url="login")
+@login_required()
 def change_email(request):
     # Change email
     if request.method == "POST":
@@ -360,7 +418,7 @@ def change_email(request):
         })
 
 
-@login_required(login_url="login")
+@login_required()
 def change_password(request):
     # Change password
     if request.method == "POST":
@@ -398,7 +456,7 @@ def change_password(request):
     })
 
 
-@login_required(login_url="login")
+@login_required()
 def delete_account(request):
     # Delete user's account
     if request.method == "POST":

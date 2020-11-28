@@ -3,16 +3,22 @@
 }
 
 body {
+    /*
+    I wanted to make the background image cover the whole window. 
+    After some online search, I've found this example on 
+    https://css-tricks.com/perfect-full-page-background-image/#awesome-easy-progressive-css3-way
+    and it worked just fine. 
+    */
     background: url('/static/background.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    
 }
 
-#index-div {
+.index-div {
     max-height: 500px;
+    position: relative;
 }
 
 /* Register/Login page */
@@ -71,6 +77,10 @@ body {
     text-decoration: none;
 }
 
+#animate {
+    position: absolute;
+}
+
 /* Questions page */
 
 .questions {
@@ -112,6 +122,11 @@ textarea {
 
 .question-content {
     max-width: 600px;
+}
+
+.font-size-medium {
+    font-family:Arial, Helvetica, sans-serif; 
+    font-size: medium;
 }
 
 .stats-div {

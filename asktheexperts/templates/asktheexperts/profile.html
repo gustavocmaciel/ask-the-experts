@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block title %}
-{{ user.username }} - Ask the Experts
+{{ user_profile.username }} - Ask the Experts
 {% endblock %}
 
 {% block body %}
 
-    <div class="container questions white-div">
+    <div id="profile-view" class="container questions white-div">
         <div class="container top-header">
             <h2 class="darkmagenta">Profile</h2>
         </div>
@@ -17,11 +17,11 @@
                 <div class="col">
                     <div id="photo-box" class="col">
                         <br>
-                        <img src="{{ user.photo.url }}" height="200px" width="200px">
+                        <img src="{{ user_profile.photo.url }}" height="200px" width="200px">
                         <br>
                         <div class="col">
                             <div id="score-box" class="row justify-content-center">
-                                <span id="user-score">{{ user.score }}</span>
+                                <span id="user-score">{{ user_profile.score }}</span>
                                 <span id="score-tag">Score</span>
                             </div>
                         </div>
@@ -29,20 +29,26 @@
                 </div>
                 <div class="col">
                     <h2>
-                        {{ user.username }}
+                        {{ user_profile.username }}
                         
                     </h2>
-                    Joined {{ user.joined }}
+                    Joined {{ user_profile.joined }}
                 </div>
                 <div class="col">
                     <div id="profile-info-div" class="row">
                         <div class="col">
-                            <h4><strong>{{ user.questioned.count}}</strong></h4> {% if user.questioned.count == 1 %} question{% else %} questions{% endif %}
+                            <h4><strong>{{ user_profile.questioned.count}}</strong></h4> {% if user_profile.questioned.count == 1 %} question{% else %} questions{% endif %}
                         </div>
                         <div class="col">
-                            <h4><strong>{{ user.answered_user.count }}</strong></h4> {% if user.answered_user.count == 1 %} answer{% else %} answers{% endif %}
+                            <h4><strong>{{ user_profile.answered_user.count }}</strong></h4> {% if user_profile.answered_user.count == 1 %} answer{% else %} answers{% endif %}
                         </div>
                     </div>
+                    <br>
+
+                    {% if not request.user == user_profile %}
+                    <button class="btn btn-sm btn-outline-danger" id="report">Report User</button>
+                    {% endif %}
+                    
                 </div>
             </div>
             <br>
@@ -62,6 +68,29 @@
 
         </div>
     </div>
+
+    {% if not request.user == user_profile %}
+    <div id="report-form-view" class="container questions">
+        <br>
+        <div>
+            <h2 class="darkmagenta">Report User: {{ user_profile.username }}</h2>
+        </div>
+        <div>
+
+            <!--Report user form-->
+            <form id="report-user-form">
+                <div class="form-group">
+                    <label><strong>Reason</strong></label>
+                    <textarea id="reason" class="form-control" type="textarea" name="reason" placeholder="Reason" required></textarea>
+                </div>
+                <input type="hidden" id="reported-user" name="reported_user" value="{{ user_profile.id }}">
+                <input class="btn btn-block btn-danger send-btn" type="submit" value="Report">
+                <br>
+            </form>
+
+        </div>
+    </div>
+    {% endif %}
 
 {% endblock %}
 

@@ -28,6 +28,9 @@ urlpatterns = [
     path("settings/change-username", views.change_username, name="change_username"),
     path("settings/change-email", views.change_email, name="change_email"),
     path("settings/change-password", views.change_password, name="change_password"),
-    path("settings/delete-account", views.delete_account, name="delete_account")
+    path("settings/delete-account", views.delete_account, name="delete_account"),
+
+    # API route
+    path("report_user", views.report_user, name="report_user"),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

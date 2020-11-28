@@ -36,3 +36,12 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"{self.id} - {self.user} answered {self.question}"
+
+
+class Reported_User(models.Model):
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="reported_user")
+    reason = models.TextField(max_length=255)
+    solved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.id} - {self.user} - solved: {self.solved}"
