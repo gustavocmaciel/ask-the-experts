@@ -7,8 +7,6 @@ body {
     background-size: cover;
 }
 
-/* Register/Login page */
-
 .sign {
     background-color:white; 
     border-radius: 10px; 
@@ -39,8 +37,6 @@ body {
     margin-right: 3px;
 }
 
-/* Index page */
-
 .index-div {
     max-height: 500px;
     position: relative;
@@ -59,19 +55,6 @@ body {
     width: 200px;
 }
 
-/*
-.white-button {
-    color:white;
-    border-color: white;
-}
-
-.white-button:hover {
-    color: #28a745;
-    background-color: white;
-    border-color: white;
-
-}
-*/
 .no-decoration:hover {
     text-decoration: none;
 }
@@ -79,8 +62,6 @@ body {
 #ask-name {
     font-family: monospace;
 }
-
-/* Questions page */
 
 .questions {
     background-color: white; 
