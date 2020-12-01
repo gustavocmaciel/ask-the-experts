@@ -1,4 +1,3 @@
-from django.core.mail import send_mail
 import json
 from django.http import JsonResponse
 from django import forms
@@ -72,16 +71,6 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-
-        # Send a welcome email to the new registered user
-        send_mail(
-            'Subject here',
-            'Here is the message.',
-            'noreply@asktheexperts.com',
-            ['to@example.com'],
-            fail_silently=False,
-        )
-
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "asktheexperts/register.html")
@@ -92,7 +81,7 @@ def questions(request):
     all_questions = Question.objects.all().order_by("-timestamp")
 
     # Add pagination
-    paginator = Paginator(all_questions, 1)
+    paginator = Paginator(all_questions, 15)
     page_number = request.GET.get('page')
     questions = paginator.get_page(page_number)
 
@@ -129,7 +118,7 @@ def question(request, question_id):
     all_answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
 
     # Add pagination to answers
-    paginator = Paginator(all_answers, 1)
+    paginator = Paginator(all_answers, 15)
     page_number = request.GET.get('page')
     answers = paginator.get_page(page_number)
 
@@ -150,7 +139,7 @@ def search(request):
     all_results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
 
     # Add pagination to results
-    paginator = Paginator(all_results, 1)
+    paginator = Paginator(all_results, 15)
     page_number = request.GET.get('page')
     results = paginator.get_page(page_number)
     

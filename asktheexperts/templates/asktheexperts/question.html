@@ -104,18 +104,12 @@
             </div>
             <hr>
             <br>
-
             <div class="row" id="answers-count-div">
                 <div class="col">
                     <h5>{{ answers_count }} {% if answers_count == 1 %} Answer{% else %} Answers{% endif %}</h5>
                 </div>
-                <div class="col">
-                    <button class="btn btn-sm btn-outline-success">Most recent</button>
-                    <button class="btn btn-sm btn-outline-success">Most votes</button>
-                </div>
             </div>
             <br>
-
 
             {% for selected in selected_answers %}
                 <div class="row container questions-div">
@@ -144,13 +138,10 @@
                     </div>
                     <div class="col stats-div">
                         <div class="voted-count">
-
                                 <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-check2-square" fill="#28a745" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L8 9.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
                                     <path fill-rule="evenodd" d="M1.5 13A1.5 1.5 0 0 0 3 14.5h10a1.5 1.5 0 0 0 1.5-1.5V8a.5.5 0 0 0-1 0v5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5h8a.5.5 0 0 0 0-1H3A1.5 1.5 0 0 0 1.5 3v10z"/>
                                 </svg>
-
-
                             {% if user.is_authenticated %}
                                 {% if not request.user in selected.answer_upvoted.all %}
                                     <div class="row justify-content-center">
@@ -374,7 +365,6 @@
                 <br>
             </form>
             </div>
-            
         </div>
     </div>
 
