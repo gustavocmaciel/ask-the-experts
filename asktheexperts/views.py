@@ -77,6 +77,7 @@ def register(request):
 
 
 def questions(request):
+
     # Get all questions
     all_questions = Question.objects.all().order_by("-timestamp")
 
@@ -122,7 +123,7 @@ def question(request, question_id):
     page_number = request.GET.get('page')
     answers = paginator.get_page(page_number)
 
-    # Get selected answers from selected question
+    # Get selected answers
     selected_answers = Answer.objects.filter(question=question_id, selected=True)
     
     return render(request, "asktheexperts/question.html", {
@@ -134,7 +135,7 @@ def question(request, question_id):
 
 
 def search(request):
-    # Search
+    # Search database
     q = request.GET["q"]
     all_results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
 
@@ -151,7 +152,7 @@ def search(request):
 
 
 def profile(request, user_id, username):
-    # Render profile page from selected user
+    # Render profile page
     user_profile = User.objects.get(id=user_id)
 
     #FIXME: Check this limit
@@ -173,6 +174,7 @@ def answer(request):
 
 @login_required()
 def select(request):
+
     # Mark answer as selected
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
@@ -203,6 +205,7 @@ def unselect(request):
 
 @login_required(login_url="login")
 def upvote_question(request):
+
     # Upvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
@@ -225,6 +228,7 @@ def upvote_question(request):
 
 @login_required(login_url="login")
 def downvote_question(request):
+
     # Downvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
@@ -249,6 +253,7 @@ def downvote_question(request):
 
 @login_required(login_url="login")
 def upvote_answer(request):
+
     # Upvote answer
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
@@ -272,6 +277,7 @@ def upvote_answer(request):
 
 @login_required(login_url="login")
 def downvote_answer(request):
+
     # Downvote answer
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
@@ -305,7 +311,6 @@ def downvote_answer(request):
 @login_required()
 def report_user(request):
 
-    # Send report must be via POST
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
 
@@ -357,7 +362,6 @@ def remove_photo(request):
 
 @login_required()
 def change_username(request):
-    # Change username
     if request.method == "POST":
 
         # Get new username
@@ -383,7 +387,6 @@ def change_username(request):
 
 @login_required()
 def change_email(request):
-    # Change email
     if request.method == "POST":
 
         # Get new email
@@ -409,7 +412,6 @@ def change_email(request):
 
 @login_required()
 def change_password(request):
-    # Change password
     if request.method == "POST":
 
         # Get new password
@@ -447,7 +449,6 @@ def change_password(request):
 
 @login_required()
 def delete_account(request):
-    # Delete user's account
     if request.method == "POST":
 
         # Get password
