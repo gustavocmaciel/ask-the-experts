@@ -1,4 +1,3 @@
-from django.core.mail import send_mail
 import json
 from django.http import JsonResponse
 from django import forms
@@ -72,27 +71,18 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-
-        # Send a welcome email to the new registered user
-        send_mail(
-            'Subject here',
-            'Here is the message.',
-            'noreply@asktheexperts.com',
-            ['to@example.com'],
-            fail_silently=False,
-        )
-
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "asktheexperts/register.html")
 
 
 def questions(request):
+
     # Get all questions
     all_questions = Question.objects.all().order_by("-timestamp")
 
     # Add pagination
-    paginator = Paginator(all_questions, 1)
+    paginator = Paginator(all_questions, 15)
     page_number = request.GET.get('page')
     questions = paginator.get_page(page_number)
 
@@ -107,6 +97,7 @@ def ask_question(request):
     if request.method == "GET":
         return render(request, "asktheexperts/ask_question.html")
     else:
+        
         # Save new question
         title = request.POST["title"]
         content = request.POST["content"]
@@ -125,15 +116,14 @@ def question(request, question_id):
 
     # Get answers count
     answers_count = Answer.objects.filter(question=question_id).count
-    # Get answers from selected question
+    
+    # Get answers and add pagination
     all_answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
-
-    # Add pagination to answers
-    paginator = Paginator(all_answers, 1)
+    paginator = Paginator(all_answers, 15)
     page_number = request.GET.get('page')
     answers = paginator.get_page(page_number)
-
-    # Get selected answers from selected question
+    
+    # Get selected answers
     selected_answers = Answer.objects.filter(question=question_id, selected=True)
     
     return render(request, "asktheexperts/question.html", {
@@ -145,12 +135,13 @@ def question(request, question_id):
 
 
 def search(request):
-    # Search
+    
+    # Search database
     q = request.GET["q"]
     all_results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
 
     # Add pagination to results
-    paginator = Paginator(all_results, 1)
+    paginator = Paginator(all_results, 15)
     page_number = request.GET.get('page')
     results = paginator.get_page(page_number)
     
@@ -162,10 +153,8 @@ def search(request):
 
 
 def profile(request, user_id, username):
-    # Render profile page from selected user
+    # Render profile page
     user_profile = User.objects.get(id=user_id)
-
-    #FIXME: Check this limit
     questions = Question.objects.filter(user_id=user_profile.id).order_by("-votes")[:10]
     return render(request, "asktheexperts/profile.html", {
         "user_profile": user_profile,
@@ -184,20 +173,21 @@ def answer(request):
 
 @login_required()
 def select(request):
+
     # Mark answer as selected
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
     Answer.objects.filter(id=answer_id).update(selected=True)
 
-    # Update answer user's score
+    # Update the score of the user who got the answer selected
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
-    new_score = answer_user_score + 15
+    new_score = answer_user_score + 25
     User.objects.filter(id=answer_user_id).update(score=new_score)
 
-    # Update selector user score
+    # Update the score of the user who selected the answer
     selector_score = User.objects.get(id=request.user.id).score
-    new_score = selector_score + 2
+    new_score = selector_score + 5
     User.objects.filter(id=request.user.id).update(score=new_score)
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
@@ -214,6 +204,7 @@ def unselect(request):
 
 @login_required(login_url="login")
 def upvote_question(request):
+
     # Upvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
@@ -225,10 +216,10 @@ def upvote_question(request):
     question.votes += 1
     question.save()
 
-    # Update question user's score
+    # Update the score of the user who got the question upvoted
     question_user_id = Question.objects.get(id=question_id).user_id
     question_user = User.objects.get(id=question_user_id)
-    question_user.score += 10
+    question_user.score += 20
     question_user.save()
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
@@ -236,6 +227,7 @@ def upvote_question(request):
 
 @login_required(login_url="login")
 def downvote_question(request):
+
     # Downvote question
     question_id = request.POST["question_id"]
     user = User.objects.get(id=request.user.id)
@@ -247,10 +239,10 @@ def downvote_question(request):
     question.votes -= 1
     question.save()
 
-    # Update question user's score
+    # Update the score of the user who got the question downvoted
     question_user_id = Question.objects.get(id=question_id).user_id
     question_user_score = User.objects.get(id=question_user_id).score
-    new_score = question_user_score - 2
+    new_score = question_user_score - 5
     if new_score < 1:
         new_score = 1
     User.objects.filter(id=question_user_id).update(score=new_score)
@@ -260,6 +252,7 @@ def downvote_question(request):
 
 @login_required(login_url="login")
 def upvote_answer(request):
+
     # Upvote answer
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
@@ -272,10 +265,10 @@ def upvote_answer(request):
     answer.votes += 1
     answer.save()
 
-    # Update answer user's score
+    # Update the score of the user who got the answer upvoted
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user = User.objects.get(id=answer_user_id)
-    answer_user.score += 10
+    answer_user.score += 20
     answer_user.save()
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
@@ -283,6 +276,7 @@ def upvote_answer(request):
 
 @login_required(login_url="login")
 def downvote_answer(request):
+
     # Downvote answer
     question_id = request.POST["question_id"]
     answer_id = request.POST["answer_id"]
@@ -295,17 +289,17 @@ def downvote_answer(request):
     answer.votes -= 1
     answer.save()
 
-    # Update answer user's score
+    # Update the score of the user who got the answer downvoted
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
-    new_score = answer_user_score - 2
+    new_score = answer_user_score - 5
     if new_score < 1:
         new_score = 1
     User.objects.filter(id=answer_user_id).update(score=new_score)
 
-    # Update current user's score
+    # Update the score of the user who downvoted the answer
     signed_in_user_score = User.objects.get(id=request.user.id).score
-    new_score = signed_in_user_score - 1
+    new_score = signed_in_user_score - 2
     if new_score < 1:
         new_score = 1
     User.objects.filter(id=request.user.id).update(score=new_score)
@@ -315,8 +309,6 @@ def downvote_answer(request):
 
 @login_required()
 def report_user(request):
-
-    # Send report must be via POST
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
 
@@ -325,6 +317,7 @@ def report_user(request):
     reported_user = data.get("reportedUser", "")
     reason = data.get("reason", "")
     
+    # Get reported user id
     reported_user_id = User.objects.get(id=reported_user)
 
     # Save report
@@ -345,6 +338,7 @@ def settings(request):
 @login_required()
 def change_photo(request):
     if request.method == 'POST':
+
         # Change user's profile photo
         form = ChangePhotoForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
@@ -353,12 +347,13 @@ def change_photo(request):
             return HttpResponseRedirect(reverse("settings"))
     else:
         return render(request, "asktheexperts/change_photo.html", {
-            "form": ChangePhotoForm(instance=request.user)
+            "form": ChangePhotoForm
         })
 
 
 @login_required()
 def remove_photo(request):
+
     # Replace user's profile photo with default photo
     user = User.objects.get(id=request.user.id)
     user.photo = 'images/default_image.jpg'
@@ -368,7 +363,6 @@ def remove_photo(request):
 
 @login_required()
 def change_username(request):
-    # Change username
     if request.method == "POST":
 
         # Get new username
@@ -377,6 +371,7 @@ def change_username(request):
         # Get submited password
         submited_password = request.POST["password"]
 
+        # Authenticate user
         user = authenticate(request, username=request.user.username, password=submited_password)
 
         # If authentication successful, update username
@@ -394,7 +389,6 @@ def change_username(request):
 
 @login_required()
 def change_email(request):
-    # Change email
     if request.method == "POST":
 
         # Get new email
@@ -403,6 +397,7 @@ def change_email(request):
         # Get submited password
         submited_password = request.POST["password"]
 
+        # Authenticate user
         user = authenticate(request, username=request.user.username, password=submited_password)
 
         # If authentication successful, update email
@@ -420,7 +415,6 @@ def change_email(request):
 
 @login_required()
 def change_password(request):
-    # Change password
     if request.method == "POST":
 
         # Get new password
@@ -435,10 +429,11 @@ def change_password(request):
                 "message": "Passwords must match."
             })
         else:
-            # Get current submited password
-            submited_password = request.POST["password"]
+            # Get current password
+            current_password = request.POST["password"]
 
-            user = authenticate(request, username=request.user.username, password=submited_password)
+            # Authenticate user
+            user = authenticate(request, username=request.user.username, password=current_password)
 
             # If authentication successful, update password
             if user is not None:
@@ -458,12 +453,12 @@ def change_password(request):
 
 @login_required()
 def delete_account(request):
-    # Delete user's account
     if request.method == "POST":
 
         # Get password
         password = request.POST["password"]
 
+        # Authenticate user
         user = authenticate(request, username=request.user.username, password=password)
         
         # If authentication successful, delete account
