@@ -3,9 +3,9 @@
 
 {% block div %}
 
-        {% if message %}
-            <div class="message-alert">{{ message }}</div>
-        {% endif %}
+    {% if message %}
+        <div class="message-alert">{{ message }}</div>
+    {% endif %}
 
     <div id="change-username-view" class="justify-content-center">
         <form action="{% url 'change_username' %}" method="post">

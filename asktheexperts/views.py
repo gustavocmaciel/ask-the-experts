@@ -155,8 +155,6 @@ def search(request):
 def profile(request, user_id, username):
     # Render profile page
     user_profile = User.objects.get(id=user_id)
-
-    #FIXME: Check this limit
     questions = Question.objects.filter(user_id=user_profile.id).order_by("-votes")[:10]
     return render(request, "asktheexperts/profile.html", {
         "user_profile": user_profile,
@@ -181,13 +179,13 @@ def select(request):
     answer_id = request.POST["answer_id"]
     Answer.objects.filter(id=answer_id).update(selected=True)
 
-    # Update answer user's score
+    # Update the score of the user who got the answer selected
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
     new_score = answer_user_score + 25
     User.objects.filter(id=answer_user_id).update(score=new_score)
 
-    # Update selector user score
+    # Update the score of the user who selected the answer
     selector_score = User.objects.get(id=request.user.id).score
     new_score = selector_score + 5
     User.objects.filter(id=request.user.id).update(score=new_score)
@@ -218,7 +216,7 @@ def upvote_question(request):
     question.votes += 1
     question.save()
 
-    # Update question user's score
+    # Update the score of the user who got the question upvoted
     question_user_id = Question.objects.get(id=question_id).user_id
     question_user = User.objects.get(id=question_user_id)
     question_user.score += 20
@@ -241,7 +239,7 @@ def downvote_question(request):
     question.votes -= 1
     question.save()
 
-    # Update question user's score
+    # Update the score of the user who got the question downvoted
     question_user_id = Question.objects.get(id=question_id).user_id
     question_user_score = User.objects.get(id=question_user_id).score
     new_score = question_user_score - 5
@@ -267,7 +265,7 @@ def upvote_answer(request):
     answer.votes += 1
     answer.save()
 
-    # Update answer user's score
+    # Update the score of the user who got the answer upvoted
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user = User.objects.get(id=answer_user_id)
     answer_user.score += 20
@@ -291,7 +289,7 @@ def downvote_answer(request):
     answer.votes -= 1
     answer.save()
 
-    # Update answer user's score
+    # Update the score of the user who got the answer downvoted
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
     new_score = answer_user_score - 5
@@ -299,7 +297,7 @@ def downvote_answer(request):
         new_score = 1
     User.objects.filter(id=answer_user_id).update(score=new_score)
 
-    # Update current user's score
+    # Update the score of the user who downvoted the answer
     signed_in_user_score = User.objects.get(id=request.user.id).score
     new_score = signed_in_user_score - 2
     if new_score < 1:
@@ -349,7 +347,7 @@ def change_photo(request):
             return HttpResponseRedirect(reverse("settings"))
     else:
         return render(request, "asktheexperts/change_photo.html", {
-            "form": ChangePhotoForm#(instance=request.user)
+            "form": ChangePhotoForm
         })
 
 
