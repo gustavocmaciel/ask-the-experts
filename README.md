@@ -36,15 +36,15 @@ In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page
 
 `asktheexperts/templates/asktheexperts/register.html` is the file for the register page where a user can make his/her registration. It has a form with four fields: `username`, `email`, `password`, `confirm password` as long with the `submit button`.
 
-`asktheexperts/templates/asktheexperts/login.html` is the file for the login page where a user can login. it has a form with two fields: `username` and `password` as long with the `submit button`.
+`asktheexperts/templates/asktheexperts/login.html` is the file for the login page. It has a form with two fields: `username` and `password` as long with the `submit button`.
 
 `asktheexperts/templates/asktheexperts/index.html` is the file for the index page that works as a landing page .It has two buttons: one redirects to the page with all of the questions made on the website and the other redirects to the page where a user can ask a question.
 
 `asktheexperts/templates/asktheexperts/ask_question.html` is the file for the page where a user who is signed in can ask as question. It has a form with two fields: one for the `title` of the question and the other for the `content` of the question.
 
-`asktheexperts/templates/asktheexperts/questions.html` is the file for the page that shows all of the questions asked. It has a for loop `tag` for the questions that are passed from the function defined in the `asktheexperts/views.py` file. So for each question it shows the `title`, the `content` (truncated), the `profile photo` of the user who made the question as well as his/her `username`, and a `timestamp`. And it also shows the number of answers this question already has and the number of votes it has. At the bottom of the file, there's also the pagination links.
+`asktheexperts/templates/asktheexperts/questions.html` is the file for the page that shows all of the questions asked. It has a for loop `tag` for the questions that are passed from the function defined in the `asktheexperts/views.py` file. So for each question it shows the `title`, the `content` (truncated), the `profile photo` of the user who made the question as well as his/her `username`, and a `timestamp`. And it also shows the number of answers this question already has and the number of votes it has. At the bottom of the file, there are the pagination links.
 
-`asktheexperts/templates/asktheexperts/question.html` is the file for the page where a user can view more details about the question. It shows the question `title`, the `content`, the `username` of the user who made the question as well as the `profile photo`, and the `timestamp`. There's also two `buttons`: one for `upvote` and the other to `downvote`. Only a user who is signed in can vote a question. It also shows the number of votes the question has. Below the question, it has a for loop `tag` for the answers that are passed from the function defined in the `asktheexperts/views.py`. For each of the aswers it shows the `content` of the answer, the `username` of the user who wrote the answer, the `profile photo` of the user who wrote the answer and also the `timestamp`. For each of the answer it also has two `buttons` that behave the same as the question buttons: one for `upvote` (the answer this time) and the other to `downvote`. It shows the number of votes the answer has received. If the user who is viewing this page is the "owner" of the question, he/she gets presented with a `button` for each of the answers, where he/she can mark the answer as `selected`, or even **unselect** any answer that has been marked by him/her before. The `selected` answers appears on the top of the answers when the page gets rendered. Only users who is signed in can vote a answer. On this file there's also the pagination links. On the bottom of the page there is a `textarea` to answer the question. Only users who are signed in can answer a question.
+`asktheexperts/templates/asktheexperts/question.html` is the file for the page where a user can view more details about the question. It shows the question `title`, the `content`, the `username` of the user who made the question as well as the `profile photo`, and the `timestamp`. There's also two `buttons`: one for `upvote` and the other to `downvote`. Only a user who is signed in can vote a question. It also shows the number of votes the question has. Below the question, it has a for loop `tag` for the answers that are passed from the function defined in the `asktheexperts/views.py`. For each of the aswers it shows the `content` of the answer, the `username` of the user who wrote the answer, the `profile photo` of the user who wrote the answer and also the `timestamp`. For each of the answers it also has two `buttons` that behave the same as the question buttons: one for `upvote` (the answer this time) and the other to `downvote`. It shows the number of votes the answer has received. If the user who is viewing this page is the "owner" of the question, he/she gets presented with a `button` for each of the answers, where he/she can mark the answer as `selected`, or even **unselect** any answer that has been marked by him/her before. The `selected` answers appears on the top of the answers when the page gets rendered. Only users who is signed in can vote a answer. On this file there are also the pagination links. On the bottom of the page there is a `textarea` to answer the question. Only users who are signed in can answer a question.
 
 `asktheexperts/templates/asktheexperts/search_results.html` is the file for the page that shows all the search results. It behaves just like the `asktheexperts/templates/asktheexperts/questions.html` but showing only the questions that meets the query from the search that the user has made.
 
@@ -52,7 +52,7 @@ In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page
 
 `asktheexperts/templates/asktheexperts/settings.html` is the file for the settings page 'layout' that can only be visited if the user is signed in. There is a `block tag` that extends the page. There are also four `buttons` that redirects to pages where a user can change his username, password, or even delete the account.
 
-`asktheexperts/templates/asktheexperts/account_info.html` is the file for the page that shows the main *info* of the user who is signed in, it shows the `profile photo`, the `username` and the `password` (as asteriscs). It also has a button with a link that redirects to the page where a user can change the `profile photo`. Below this button there is another button to `remove` the current `profile photo`.
+`asktheexperts/templates/asktheexperts/account_info.html` is the file for the page that shows the main *info* of the user who is signed in, it shows the `profile photo`, the `username` and the `password` (hidden behind asterisks). It also has a button with a link that redirects to the page where a user can change the `profile photo`. Below this button there is another button to `remove` the current `profile photo`.
 
 `asktheexperts/templates/asktheexperts/change_photo.html` is the file for the page where a user can change his/her `profile photo` by submmiting a form.
 
@@ -67,6 +67,12 @@ In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page
 `asktheexperts/static/asktheexperts/styles.css` is the file that contains all of the `CSS` for the project.
 
 `asktheexperts/static/asktheexperts/main.js` is the file that contains the `Javascript` functions for the project.
+
+On the `asktheexperts/static/asktheexperts` folder, there are two image files:
+- `background.png` is the image file used as the **background image**. 
+- `logo.png` is the image file used as the **website logo** and also as the **icon**.
+
+On the root directory, there is a `media/images` folder. This is the folder to store the profile photos from the users. In this folder there's a image called `default_image.jpg`, this is the image used as the *default photo* when a user make his/her registration.
 
 ## Distinctiveness and Complexity
 
