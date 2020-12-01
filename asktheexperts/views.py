@@ -184,12 +184,12 @@ def select(request):
     # Update answer user's score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
-    new_score = answer_user_score + 15
+    new_score = answer_user_score + 25
     User.objects.filter(id=answer_user_id).update(score=new_score)
 
     # Update selector user score
     selector_score = User.objects.get(id=request.user.id).score
-    new_score = selector_score + 2
+    new_score = selector_score + 5
     User.objects.filter(id=request.user.id).update(score=new_score)
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
@@ -221,7 +221,7 @@ def upvote_question(request):
     # Update question user's score
     question_user_id = Question.objects.get(id=question_id).user_id
     question_user = User.objects.get(id=question_user_id)
-    question_user.score += 10
+    question_user.score += 20
     question_user.save()
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
@@ -244,7 +244,7 @@ def downvote_question(request):
     # Update question user's score
     question_user_id = Question.objects.get(id=question_id).user_id
     question_user_score = User.objects.get(id=question_user_id).score
-    new_score = question_user_score - 2
+    new_score = question_user_score - 5
     if new_score < 1:
         new_score = 1
     User.objects.filter(id=question_user_id).update(score=new_score)
@@ -270,7 +270,7 @@ def upvote_answer(request):
     # Update answer user's score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user = User.objects.get(id=answer_user_id)
-    answer_user.score += 10
+    answer_user.score += 20
     answer_user.save()
 
     return HttpResponseRedirect(reverse("question",args=(question_id,)))
@@ -294,14 +294,14 @@ def downvote_answer(request):
     # Update answer user's score
     answer_user_id = Answer.objects.get(id=answer_id).user_id
     answer_user_score = User.objects.get(id=answer_user_id).score
-    new_score = answer_user_score - 2
+    new_score = answer_user_score - 5
     if new_score < 1:
         new_score = 1
     User.objects.filter(id=answer_user_id).update(score=new_score)
 
     # Update current user's score
     signed_in_user_score = User.objects.get(id=request.user.id).score
-    new_score = signed_in_user_score - 1
+    new_score = signed_in_user_score - 2
     if new_score < 1:
         new_score = 1
     User.objects.filter(id=request.user.id).update(score=new_score)
