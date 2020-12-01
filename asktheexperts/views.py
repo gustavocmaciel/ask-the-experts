@@ -97,6 +97,7 @@ def ask_question(request):
     if request.method == "GET":
         return render(request, "asktheexperts/ask_question.html")
     else:
+        
         # Save new question
         title = request.POST["title"]
         content = request.POST["content"]
@@ -115,14 +116,13 @@ def question(request, question_id):
 
     # Get answers count
     answers_count = Answer.objects.filter(question=question_id).count
-    # Get answers from selected question
+    
+    # Get answers and add pagination
     all_answers = Answer.objects.filter(question=question_id, selected=False).order_by("-votes")
-
-    # Add pagination to answers
     paginator = Paginator(all_answers, 15)
     page_number = request.GET.get('page')
     answers = paginator.get_page(page_number)
-
+    
     # Get selected answers
     selected_answers = Answer.objects.filter(question=question_id, selected=True)
     
@@ -135,6 +135,7 @@ def question(request, question_id):
 
 
 def search(request):
+    
     # Search database
     q = request.GET["q"]
     all_results = Question.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).order_by("-timestamp")
@@ -310,7 +311,6 @@ def downvote_answer(request):
 
 @login_required()
 def report_user(request):
-
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
 
@@ -319,6 +319,7 @@ def report_user(request):
     reported_user = data.get("reportedUser", "")
     reason = data.get("reason", "")
     
+    # Get reported user id
     reported_user_id = User.objects.get(id=reported_user)
 
     # Save report
@@ -339,6 +340,7 @@ def settings(request):
 @login_required()
 def change_photo(request):
     if request.method == 'POST':
+
         # Change user's profile photo
         form = ChangePhotoForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
@@ -347,12 +349,13 @@ def change_photo(request):
             return HttpResponseRedirect(reverse("settings"))
     else:
         return render(request, "asktheexperts/change_photo.html", {
-            "form": ChangePhotoForm(instance=request.user)
+            "form": ChangePhotoForm#(instance=request.user)
         })
 
 
 @login_required()
 def remove_photo(request):
+
     # Replace user's profile photo with default photo
     user = User.objects.get(id=request.user.id)
     user.photo = 'images/default_image.jpg'
@@ -370,6 +373,7 @@ def change_username(request):
         # Get submited password
         submited_password = request.POST["password"]
 
+        # Authenticate user
         user = authenticate(request, username=request.user.username, password=submited_password)
 
         # If authentication successful, update username
@@ -395,6 +399,7 @@ def change_email(request):
         # Get submited password
         submited_password = request.POST["password"]
 
+        # Authenticate user
         user = authenticate(request, username=request.user.username, password=submited_password)
 
         # If authentication successful, update email
@@ -426,10 +431,11 @@ def change_password(request):
                 "message": "Passwords must match."
             })
         else:
-            # Get current submited password
-            submited_password = request.POST["password"]
+            # Get current password
+            current_password = request.POST["password"]
 
-            user = authenticate(request, username=request.user.username, password=submited_password)
+            # Authenticate user
+            user = authenticate(request, username=request.user.username, password=current_password)
 
             # If authentication successful, update password
             if user is not None:
@@ -454,6 +460,7 @@ def delete_account(request):
         # Get password
         password = request.POST["password"]
 
+        # Authenticate user
         user = authenticate(request, username=request.user.username, password=password)
         
         # If authentication successful, delete account
