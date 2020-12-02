@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadProfilePage(){
 
-  // Show report-form-view and hide profile-view
+  // Show profile-view and hide report-form-view
   document.querySelector('#profile-view').style.display = 'block';
   document.querySelector('#report-form-view').style.display = 'none';
 }
 
 function reportForm() {
 
-  // Show compose view and hide other views
+  // Show report-form-view and hide profile-view
   document.querySelector('#profile-view').style.display = 'none';
   document.querySelector('#report-form-view').style.display = 'block';
 
