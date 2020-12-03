@@ -4,7 +4,7 @@
 
 When a user registers, he/she gets a default profile photo (that can be changed later on the **settings page**) and has a starting score of `1`.
 
-On the **settings page**, any user (who is signed in) can change his/her username, email, password and, additionally, delete his/her account. When a user visits his own question page, the user has the ability to **mark** any answer as **selected**, which means this answer was useful and then, the **selected answer** appears on the top of all the other answers.
+On the **settings page**, any user (who is signed in) can change his/her username, email, password and, additionally, delete his/her account. When a user visits his own question page, he/she has the ability to **mark** any answer as **selected**, which means this answer was useful and then, the **selected answer** appears on the top of all the other answers.
 
 The **score system** works like this:
 - When a question is upvoted: the user who asked the question gets `+20` points.
@@ -13,7 +13,7 @@ The **score system** works like this:
 - When a question is downvoted: the user who asked the question looses `-5` points.
 - When a answer is downvoted: the user who wrote the answer looses `-5` points, and the user who voted down the answer looses `-2` points.
 
-Any user on this website can report any other user if he/she notices some kind of bad conduct. This *report* can, later, be reviewed by the site administrator (via admin page). The administrator can then decide if the user who commited the 'infraction' should have his/her account removed.
+Any user on this website can report any other user if he/she notices any kind of bad conduct. This *report* can, later, be reviewed by the site administrator (via admin page). The administrator can then decide if the user who commited the 'infraction' should have his/her account removed.
 
 ## Files
 
@@ -28,7 +28,7 @@ In `asktheexperts/models.py`, all the models are defined. There are `four` model
 
 In `asktheexperts/urls.py`, all the URL configuration of the app is defined.
 
-In `asktheexperts/views.py`, all the views associated with each of the routes are defined. There are 24 views in total and the majority of them have the `@loginrequired` decorator to prevent a user who is not signed in from accessing any of those views. In this file there's also a form to change the profile photo named as `ChangePhotoForm`.
+In `asktheexperts/views.py`, all the views associated with each of the routes are defined. There are 24 views in total and the majority of them have the `@loginrequired` decorator to prevent a user who is not signed in from accessing any of those views. In this file there's also a form to change the profile photo called `ChangePhotoForm`.
 
 In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page are registerd. *All* the models are registered so the site administrator has total control of the database.
 
@@ -48,7 +48,7 @@ In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page
 
 `asktheexperts/templates/asktheexperts/search_results.html` is the file for the page that shows all the search results. It behaves just like the `asktheexperts/templates/asktheexperts/questions.html` but showing only the questions that meets the query from the search that the user has made.
 
-`asktheexperts/templates/asktheexperts/profile.html` is the file for the profile page. Each user has its own profile page that shows all of his/her *info*. It shows the `profile photo`, the `username`, a `timestamp` indicating the date when the user made his/her registration and it also has the number of questions asked and the number of the questions answered. It has a button to *report a user*. When this button is clicked, a javascript function (defined in the `asktheexperts/static/asktheexperts/main.js` file) hides the `profile-div` and shows a form where a user can write the reason why this user is being reported. On the bottom it has some links to the questions that have been made by this user.
+`asktheexperts/templates/asktheexperts/profile.html` is the file for the profile page. Each user has its own profile page that shows all of his/her *info*. It shows the `profile photo`, the `username`, a `timestamp` indicating the date when the user made his/her registration and it also has the number of questions asked and the number of the questions answered. It has a button to *report a user*. When this button is clicked, a javascript function (defined in the `asktheexperts/static/asktheexperts/scripts.js` file) hides the `profile-div` and shows a form where a user can write the reason why this user is being reported. On the bottom it has some links to the questions that have been made by this user.
 
 `asktheexperts/templates/asktheexperts/settings.html` is the file for the settings page that can only be visited if the user is signed in. There is a `block tag` that extends the page. There are also four `buttons` that redirects to pages where a user can change his username, password, or even delete the account.
 
@@ -66,7 +66,7 @@ In `asktheexperts/admin.py`, the models that can be accessed in the `admin` page
 
 `asktheexperts/static/asktheexperts/styles.css` is the file that contains the `CSS` for the project.
 
-`asktheexperts/static/asktheexperts/main.js` is the file that contains the `Javascript` functions for the project.
+`asktheexperts/static/asktheexperts/scripts.js` is the file that contains the `Javascript` functions for the project.
 
 On the `asktheexperts/static/asktheexperts` folder, there are also two image files:
 - `background.png` is the image file used as the **background image**. 
@@ -78,11 +78,11 @@ On the root directory, there is a `media/images` folder. This is the folder to s
 
 This project draws upon this course's lessons and is `sufficiently distinct` from the other projects of this course because, unlike those, this project is a web application for asking and answering programming questions where users can have a score based on the votes that his/her questions and/or answers receives from other users.
 
-This project is also `more complex` than the previous projects because, on this project, each registred user has a default profile photo that can be changed by him/her later, or even removed (which in this case just sets the photo back to the default photo). It has a score system based on the actions that every single user makes on the website, and a user **cannot** have a score lower than `1` . It has a search function that searches the database for questions that meets the search query. It has functions to change the username, password, email and also delete the entire account. It has not only the option to upvote a question and/or answer, but also to downvote (each question and/or answer can have a negative number of votes). It also has a *report user* function where any user can report any other user if he/she spots some kind of bad conduct.
+This project is also `more complex` than the previous projects because, in this project, each registred user has a default profile photo that can be changed by him/her later, or even removed (which in this case just sets the photo back to the default photo). It has a score system based on the actions that every single user makes on the website, and a user **cannot** have a score lower than `1` . It has a search function that searches the database for questions that meets the search query. It has functions to change the username, password, email and also delete the entire account. It has not only the option to upvote a question and/or answer, but also to downvote (each question and/or answer can have a negative number of votes). It also has a *report user* function where any user can report any other user if he/she notices any kind of bad conduct.
 
 It *also* meets the requirements because:
 - It does utilize Django (including at least one model (it has four models)) on the back-end and Javascript on the front-end.
-- It is mobile responsive. I've used Bootstrap, which was designed to make the web application mobile responsive. I've added the **responsive viewport meta tag** to the `<head>` of the `asktheexperts/templates/asktheexperts/layout.html` file.
+- It is mobile responsive. I used Bootstrap, which was designed to make the web application mobile responsive.
 
 ## Python packages
 
