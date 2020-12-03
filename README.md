@@ -1,5 +1,7 @@
 # Capstone
 
+The final project is a web application called `Ask the Experts`.
+
 **Ask the Experts** is a web application where users can ask questions about programming and also answer those questions. They can also search for questions in the search bar and additionally upvote or downvote each question and/or answer. There's a score system based on each action that happens on the website (users whose question gets more votes has a higher score, for example). 
 
 When a user registers, he/she gets a default profile photo (that can be changed later on the **settings page**) and has a starting score of `1`.
