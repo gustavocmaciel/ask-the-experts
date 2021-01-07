@@ -55,6 +55,18 @@ body {
     width: 200px;
 }
 
+.white-button {
+    color:white;
+    border-color: white;
+}
+
+.white-button:hover {
+    color: #28a745;
+    background-color: white;
+    border-color: white;
+
+}
+
 .no-decoration:hover {
     text-decoration: none;
 }
