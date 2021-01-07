@@ -1,4 +1,4 @@
-# Capstone
+# Ask the Experts
 
 The final project is a web application called `Ask the Experts`.
 
