@@ -3,18 +3,15 @@
 
 {% block body %}
 
-    <div class="container">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="row align-items-center index-div">
-                    <div class="col text-center">
-                        <div class="index-heading">
-                            Ask the Experts
-                        </div>
-                        <br>
-                        <a href="{% url 'questions' %}" class="index-button btn btn-lg btn-success">Browse Questions</a>
-                        <a href="{% url 'ask_question' %}" class="index-button btn btn-lg btn-success">Ask a Question</a>
-                    </div>
+    <div class="layers-foreground">
+        <div class="container text-white">
+            <div id="index-div" class="row justify-content-center align-items-center vh-100">
+                <div class="col-md-8 text-center text-shadow">
+                    <h1 class="display-2 mb-2"><b>Ask the</b> Experts</h1>
+                    <h3 >Because your question matters</h3>
+                    <br>
+                    <a href="{% url 'questions' %}" class="index-button btn btn-lg btn-success">Browse Questions</a>
+                    <a href="{% url 'ask_question' %}" class="index-button white-button btn btn-lg btn-outline-success">Ask Question</a>
                 </div>
             </div>
         </div>
