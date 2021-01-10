@@ -33,6 +33,5 @@ urlpatterns = [
     # API route
     path("report_user", views.report_user, name="report_user"),
     
-]
-if settings.DEBUG:
-     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
