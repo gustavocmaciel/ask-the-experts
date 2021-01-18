@@ -16,6 +16,17 @@ The **score system** works like this:
 - When a answer is downvoted: the user who wrote the answer looses `-5` points, and the user who voted down the answer looses `-2` points.
 
 Any user on this website can report any other user if he/she notices any kind of bad conduct. This *report* can, later, be reviewed by the site administrator (via admin page). The administrator can then decide if the user who commited the 'infraction' should have his/her account removed.
+## Screenshots
+
+![image](https://user-images.githubusercontent.com/66797203/104955732-6abc4300-59a9-11eb-8d61-932f49c38b3f.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955409-013c3480-59a9-11eb-99b4-787d4fd21f3a.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955528-1b761280-59a9-11eb-9826-eb83c8269f2b.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955649-3ba5d180-59a9-11eb-863f-1273bd5187fd.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955676-4eb8a180-59a9-11eb-8a7f-f72477782f70.png)
 
 ## Python packages
 
