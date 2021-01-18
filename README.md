@@ -1,7 +1,5 @@
 # Ask the Experts
 
-The final project is a web application called `Ask the Experts`.
-
 **Ask the Experts** is a web application where users can ask questions about programming and also answer those questions. They can also search for questions in the search bar and additionally upvote or downvote each question and/or answer. There's a score system based on each action that happens on the website (users whose question gets more votes has a higher score, for example). 
 
 When a user registers, he/she gets a default profile photo (that can be changed later on the **settings page**) and has a starting score of `1`.
@@ -16,6 +14,7 @@ The **score system** works like this:
 - When a answer is downvoted: the user who wrote the answer looses `-5` points, and the user who voted down the answer looses `-2` points.
 
 Any user on this website can report any other user if he/she notices any kind of bad conduct. This *report* can, later, be reviewed by the site administrator (via admin page). The administrator can then decide if the user who commited the 'infraction' should have his/her account removed.
+
 ## Screenshots
 
 ![image](https://user-images.githubusercontent.com/66797203/104956063-1ebdce00-59aa-11eb-9a4f-bded722d3496.png)
