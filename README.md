@@ -24,10 +24,9 @@ Any user on this website can report any other user if he/she notices any kind of
 
 ![image](https://user-images.githubusercontent.com/66797203/104955874-b111a200-59a9-11eb-9c19-cbd0e3c0030b.png)
 
-![image](https://user-images.githubusercontent.com/66797203/104955937-d6061500-59a9-11eb-8b90-bd0a38cc50d0.png)
-
 ![image](https://user-images.githubusercontent.com/66797203/104955960-e4ecc780-59a9-11eb-949a-1d39f8b3a022.png)
 
+![image](https://user-images.githubusercontent.com/66797203/104955937-d6061500-59a9-11eb-8b90-bd0a38cc50d0.png)
 
 ![image](https://user-images.githubusercontent.com/66797203/104955732-6abc4300-59a9-11eb-8d61-932f49c38b3f.png)
 
