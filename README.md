@@ -76,16 +76,6 @@ On the `asktheexperts/static/asktheexperts` folder, there are also two image fil
 
 On the root directory, there is a `media/images` folder. This is the folder to store the profile photos from the users. In this folder there's also a image called `default_image.jpg`, this is the image used as the *default photo* when a user make his/her registration.
 
-## Distinctiveness and Complexity
-
-This project draws upon this course's lessons and is `sufficiently distinct` from the other projects of this course because, unlike those, this project is a web application for asking and answering programming questions where users can have a score based on the votes that his/her questions and/or answers receives from other users.
-
-This project is also `more complex` than the previous projects because, in this project, each registred user has a default profile photo that can be changed by him/her later, or even removed (which in this case just sets the photo back to the default photo). It has a score system based on the actions that every single user makes on the website, and a user **cannot** have a score lower than `1` . It has a search function that searches the database for questions that meets the search query. It has functions to change the username, password, email and also delete the entire account. It has not only the option to upvote a question and/or answer, but also to downvote (each question and/or answer can have a negative number of votes). It also has a *report user* function where any user can report any other user if he/she notices any kind of bad conduct.
-
-It *also* meets the requirements because:
-- It does utilize Django (including at least one model (it has four models)) on the back-end and Javascript on the front-end.
-- It is mobile responsive. I used Bootstrap, which was designed to make the web application mobile responsive.
-
 ## Python packages
 
 All the Python packages that need to be installed to run this web application are **included** in the [requirements.txt](requirements.txt) file.
