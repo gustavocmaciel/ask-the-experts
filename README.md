@@ -18,6 +18,17 @@ The **score system** works like this:
 Any user on this website can report any other user if he/she notices any kind of bad conduct. This *report* can, later, be reviewed by the site administrator (via admin page). The administrator can then decide if the user who commited the 'infraction' should have his/her account removed.
 ## Screenshots
 
+![image](https://user-images.githubusercontent.com/66797203/104956063-1ebdce00-59aa-11eb-9a4f-bded722d3496.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955999-fe8e0f00-59a9-11eb-9954-078ac5344262.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955874-b111a200-59a9-11eb-9c19-cbd0e3c0030b.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955937-d6061500-59a9-11eb-8b90-bd0a38cc50d0.png)
+
+![image](https://user-images.githubusercontent.com/66797203/104955960-e4ecc780-59a9-11eb-949a-1d39f8b3a022.png)
+
+
 ![image](https://user-images.githubusercontent.com/66797203/104955732-6abc4300-59a9-11eb-8d61-932f49c38b3f.png)
 
 ![image](https://user-images.githubusercontent.com/66797203/104955409-013c3480-59a9-11eb-99b4-787d4fd21f3a.png)
