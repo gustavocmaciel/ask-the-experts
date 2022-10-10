@@ -101,10 +101,7 @@ class LogoutViewTest(TestCase):
         login = self.client.login(username='test_user', password='abcd')
         # Check user is logged in
         response = self.client.get(reverse('index'))
-        self.assertEqual(
-                str(response.context['user']),
-                '1 - test_user'  # No idea why we need to add `1 - ` before
-                )                # the actual username to make it work.
+        self.assertEqual(str(response.context['user'].username), 'test_user')
 
         # Check user log out
         response = self.client.get('/logout')
