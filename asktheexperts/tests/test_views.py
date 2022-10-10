@@ -583,7 +583,7 @@ class UnselectViewTest(TestCase):
                 user=User.objects.get(username='test_user_2'),
                 question=Question.objects.get(title='test title'),
                 content=f'test content'
-                    )
+                )
         Answer.objects.filter(id=1).update(selected=True)
 
     def test_unselect_view_exists_at_desired_location(self):
@@ -727,3 +727,61 @@ class DownvoteQuestionViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(question_votes, -1)
         self.assertEqual(user_got_upvoted_score, 1)
+
+
+class UpvoteAnswerViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+        # Create a second test user
+        test_user_2 = User.objects.create_user(
+                username='test_user_2',
+                email='test_user_2@email.com',
+                password='abcdef'
+                )
+        test_user_2.save()
+
+        # Create a test question
+        Question.objects.create(
+                user=User.objects.get(username='test_user_2'),
+                title='test title',
+                content='test content'
+                )
+
+        # Create a test answer
+        Answer.objects.create(
+                user=User.objects.get(username='test_user_2'),
+                question=Question.objects.get(title='test title'),
+                content=f'test content'
+                )
+    def test_upvote_answer_view_exists_at_desired_location(self):
+        response = self.client.get('/upvote_answer')
+        self.assertEqual(response.status_code, 302)
+
+    def test_upvote_answer_view_accesible_by_name(self):
+        response = self.client.get(reverse('upvote_answer'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_upvote_answer(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.post('/upvote_answer', {
+            'answer_id': 1,
+            'question_id': 1
+            })
+
+        user_got_upvoted_score = User.objects.get(id=2).score
+        answer_votes = Answer.objects.get(id=1).votes
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(answer_votes, 1)
+        self.assertEqual(user_got_upvoted_score, 21)
