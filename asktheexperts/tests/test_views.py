@@ -550,3 +550,61 @@ class AnswerViewTest(TestCase):
         self.assertEqual(answer.question.id, 1)
         self.assertEqual(answer.user.id, 1)
 
+
+class SelectViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+        # Create a second test user
+        test_user_2 = User.objects.create_user(
+                username='test_user_2',
+                email='test_user_2@email.com',
+                password='abcdef'
+                )
+        test_user_2.save()
+
+        # Create a test question
+        Question.objects.create(
+                user=User.objects.get(username='test_user'),
+                title='test title',
+                content='test content'
+                )
+
+        # Create a test answer
+        Answer.objects.create(
+                user=User.objects.get(username='test_user_2'),
+                question=Question.objects.get(title='test title'),
+                content=f'test content'
+                )
+
+    def test_select_view_exists_at_desired_location(self):
+        response = self.client.get('/select')
+        self.assertEqual(response.status_code, 302)
+
+    def test_select_view_accesible_by_name(self):
+        response = self.client.get(reverse('select'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_select_answer(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+        response = self.client.post('/select', {
+            'question_id': 1,
+            'answer_id': 1
+            })
+        user_selected_score = User.objects.get(id=1).score
+        user_got_selected_score = User.objects.get(id=2).score
+        answer_is_selected = Answer.objects.get(question_id=1).selected
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(user_selected_score, 6)
+        self.assertEqual(user_got_selected_score, 26)
+        self.assertEqual(answer_is_selected, True)
