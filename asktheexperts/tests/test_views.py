@@ -449,3 +449,51 @@ class AskQuestionTest(TestCase):
         self.assertRedirects(response, '/questions')
         self.assertEqual(question.title, 'test_title')
         self.assertEqual(question.content, 'test_content')
+
+
+class ProfileViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+        # Create 5 test questions
+        number_of_questions = 5
+        for question_id in range(number_of_questions):
+            Question.objects.create(
+                    user=User.objects.get(username='test_user'),
+                    title=f'title {question_id}',
+                    content=f'content {question_id}'
+                    )
+
+    def test_profile_view_exists_at_desired_location(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get(f'/profile/{1}/test_user')
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_view_accesible_by_name(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get(reverse('profile',args=(1,'test_user')))
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_view_uses_correct_template(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        user_profile = User.objects.get(id=1)
+
+        response = self.client.get(reverse('profile',args=(1,'test_user')))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'asktheexperts/profile.html')
+        self.assertEqual(response.context['user_profile'], user_profile)
+        self.assertEqual(len(response.context['questions']), 5)
