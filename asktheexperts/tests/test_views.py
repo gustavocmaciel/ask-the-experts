@@ -401,3 +401,51 @@ class QuestionViewTest(TestCase):
         # self.assertEqual(response.context['answers_count'], 35)
 
         self.assertEqual(len(response.context['selected_answers']), 0)
+
+
+class AskQuestionTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+    def test_ask_question_view_exists_at_desired_location(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get('/ask_question')
+        self.assertEqual(response.status_code, 200)
+
+    def test_ask_question_view_accesible_by_name(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get(reverse('ask_question'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_ask_question_view_uses_correct_template(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get(reverse('ask_question'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'asktheexperts/ask_question.html')
+
+    def test_ask_question(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.post('/ask_question', {'title': 'test_title', 'content': 'test_content'})
+
+        question = Question.objects.get(id=1)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/questions')
+        self.assertEqual(question.title, 'test_title')
+        self.assertEqual(question.content, 'test_content')
