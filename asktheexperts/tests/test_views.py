@@ -710,7 +710,7 @@ class DownvoteQuestionViewTest(TestCase):
         self.assertEqual(question_votes, -1)
         self.assertEqual(user_got_upvoted_score, 3)
 
-    def test_downvote_question_user__score_lower_than_one(self):
+    def test_downvote_question_user_score_lower_than_one(self):
         # Log in test user
         login = self.client.login(username='test_user', password='abcd')
 
@@ -751,7 +751,7 @@ class UpvoteAnswerViewTest(TestCase):
 
         # Create a test question
         Question.objects.create(
-                user=User.objects.get(username='test_user_2'),
+                user=User.objects.get(username='test_user'),
                 title='test title',
                 content='test content'
                 )
@@ -785,3 +785,101 @@ class UpvoteAnswerViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(answer_votes, 1)
         self.assertEqual(user_got_upvoted_score, 21)
+
+
+class DownvoteAnswerViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+        # Create a second test user
+        test_user_2 = User.objects.create_user(
+                username='test_user_2',
+                email='test_user_2@email.com',
+                password='abcdef'
+                )
+        test_user_2.save()
+
+        # Create a test question
+        Question.objects.create(
+                user=User.objects.get(username='test_user'),
+                title='test title',
+                content='test content'
+                )
+
+        # Create a test answer
+        Answer.objects.create(
+                user=User.objects.get(username='test_user_2'),
+                question=Question.objects.get(title='test title'),
+                content=f'test content'
+                )
+    def test_downvote_answer_view_exists_at_desired_location(self):
+        response = self.client.get('/downvote_answer')
+        self.assertEqual(response.status_code, 302)
+
+    def test_downvote_answer_view_accesible_by_name(self):
+        response = self.client.get(reverse('downvote_answer'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_downvote_answer(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        # Set user score to 8
+        user = User.objects.get(id=2)
+        user.score = 8
+        user.save()
+
+        # Set user who downvoted score to 8
+        user_who_downvoted = User.objects.get(id=1)
+        user_who_downvoted.score = 8
+        user_who_downvoted.save()
+
+        response = self.client.post('/downvote_answer', {
+            'answer_id': 1,
+            'question_id': 1
+            })
+
+        user_got_downvoted_score = User.objects.get(id=2).score
+        user_who_downvoted_score = User.objects.get(id=1).score
+        answer_votes = Answer.objects.get(id=1).votes
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(answer_votes, -1)
+        self.assertEqual(user_got_downvoted_score, 3)
+        self.assertEqual(user_who_downvoted_score, 6)
+
+    def test_downvote_answer_user_score_lower_than_one(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        # Set user score to 2
+        user = User.objects.get(id=2)
+        user.score = 2
+        user.save()
+
+        # Set user score to 2
+        user_who_downvoted = User.objects.get(id=1)
+        user_who_downvoted.score = 2
+        user_who_downvoted.save()
+
+        response = self.client.post('/downvote_answer', {
+            'answer_id': 1,
+            'question_id': 1
+            })
+
+        user_got_downvoted_score = User.objects.get(id=2).score
+        user_who_downvoted_score = User.objects.get(id=1).score
+        answer_votes = Answer.objects.get(id=1).votes
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(answer_votes, -1)
+        self.assertEqual(user_got_downvoted_score, 1)
+        self.assertEqual(user_who_downvoted_score, 1)
