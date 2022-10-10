@@ -438,7 +438,10 @@ class AskQuestionTest(TestCase):
         # Log in test user
         login = self.client.login(username='test_user', password='abcd')
 
-        response = self.client.post('/ask_question', {'title': 'test_title', 'content': 'test_content'})
+        response = self.client.post('/ask_question', {
+            'title': 'test_title',
+            'content': 'test_content'
+            })
 
         question = Question.objects.get(id=1)
 
@@ -534,7 +537,10 @@ class AnswerViewTest(TestCase):
         # Log in test user
         login = self.client.login(username='test_user', password='abcd')
 
-        response = self.client.post('/answer', {'question_id': 1, 'content': 'test content'})
+        response = self.client.post('/answer', {
+            'question_id': 1,
+            'content': 'test content'
+            })
         self.assertEqual(response.status_code, 302)
 
         answer = Answer.objects.get(id=1)
