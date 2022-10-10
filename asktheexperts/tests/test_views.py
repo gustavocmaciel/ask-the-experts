@@ -396,5 +396,8 @@ class QuestionViewTest(TestCase):
 
         self.assertEqual(response.context['question'], question)
         self.assertEqual(len(response.context['answers']), 5)
+
+        # FIXME: This should be returning True
         # self.assertEqual(response.context['answers_count'], 35)
+
         self.assertEqual(len(response.context['selected_answers']), 0)
