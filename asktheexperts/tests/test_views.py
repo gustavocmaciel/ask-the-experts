@@ -497,3 +497,53 @@ class ProfileViewTest(TestCase):
         self.assertTemplateUsed(response, 'asktheexperts/profile.html')
         self.assertEqual(response.context['user_profile'], user_profile)
         self.assertEqual(len(response.context['questions']), 5)
+
+
+class AnswerViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+        # Create a second test user
+        test_user_2 = User.objects.create_user(
+                username='test_user_2',
+                email='test_user_2@email.com',
+                password='abcdef'
+                )
+        test_user_2.save()
+
+        # Create a test question
+        Question.objects.create(
+                user=User.objects.get(username='test_user'),
+                title='test title',
+                content='test content'
+                )
+
+    def test_answer_view_exists_at_desired_location(self):
+        response = self.client.get('/answer')
+        self.assertEqual(response.status_code, 302)
+
+    def test_answer_view_accesible_by_name(self):
+        response = self.client.get(reverse('answer'))
+        self.assertEqual(response.status_code, 302)
+    def test_answer_question(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.post('/answer', {'question_id': 1, 'content': 'test content'})
+        self.assertEqual(response.status_code, 302)
+
+        answer = Answer.objects.get(id=1)
+        user_profile = User.objects.get(id=1)
+
+        self.assertEqual(answer.content, 'test content')
+        self.assertEqual(answer.question.id, 1)
+        self.assertEqual(answer.user.id, 1)
+
