@@ -883,3 +883,116 @@ class DownvoteAnswerViewTest(TestCase):
         self.assertEqual(answer_votes, -1)
         self.assertEqual(user_got_downvoted_score, 1)
         self.assertEqual(user_who_downvoted_score, 1)
+
+
+class ReportUserViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+        # Create a second test user
+        test_user_2 = User.objects.create_user(
+                username='test_user_2',
+                email='test_user_2@email.com',
+                password='abcdef'
+                )
+        test_user_2.save()
+
+    def test_report_user_view_exists_at_desired_location(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        test_json = {
+                'reportedUser': 2,
+                'content': 'test content'
+                }
+
+        response = self.client.post('/report_user', data=test_json, content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+    def test_report_user_view_accesible_by_name(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        test_json = {'reportedUser': 2, 'content': 'test content'}
+
+        response = self.client.post(
+                reverse('report_user'),
+                data=test_json,
+                content_type='application/json'
+                )
+        self.assertEqual(response.status_code, 201)
+
+    def test_report_user_view_returns_404_if_not_post(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get('/report_user')
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue('POST request required.' in str(response.content))
+        response_reverse = self.client.get(reverse('report_user'))
+        self.assertEqual(response_reverse.status_code, 400)
+
+    def test_report_user(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        test_json = {'reportedUser': 2, 'reason': 'test content'}
+
+        response = self.client.post(
+                reverse('report_user'),
+                data=test_json,
+                content_type='application/json'
+                )
+
+        #Check data
+        report = Reported_User.objects.get(id=1)
+        reported_user = report.user.id
+        reason = reason = report.reason
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue('Report sent successfully.' in str(response.content))
+        self.assertEqual(reported_user, test_json["reportedUser"])
+        self.assertEqual(reason, test_json["reason"])
+
+
+class SettingsViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test user
+        test_user = User.objects.create_user(
+                username='test_user',
+                email='test_user@email.com',
+                password='abcd'
+                )
+        test_user.save()
+
+    def test_settings_view_exists_at_desired_location(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get('/settings')
+        self.assertEqual(response.status_code, 200)
+
+    def test_settings_view_accesible_by_name(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get(reverse('settings'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_settings_view_uses_correct_template(self):
+        # Log in test user
+        login = self.client.login(username='test_user', password='abcd')
+
+        response = self.client.get(reverse('settings'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'asktheexperts/settings.html')
